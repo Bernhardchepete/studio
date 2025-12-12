@@ -3,3 +3,4 @@ config();
 
 import '@/ai/flows/generate-financial-summary.ts';
 import '@/ai/flows/personalized-budget-suggestions.ts';
+import '@/ai/flows/financial-scenario-simulator.ts';

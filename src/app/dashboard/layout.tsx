@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Logo } from "@/components/logo";
 import { Nav } from "@/components/nav";
+import { BottomNav } from "@/components/bottom-nav";
 
 export default function DashboardLayout({
   children,
@@ -24,7 +25,8 @@ export default function DashboardLayout({
         </SidebarContent>
       </Sidebar>
       <SidebarInset>
-        {children}
+        <div className="flex-1 pb-16 md:pb-0">{children}</div>
+        <BottomNav />
       </SidebarInset>
     </SidebarProvider>
   );

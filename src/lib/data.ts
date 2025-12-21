@@ -11,7 +11,7 @@ export const transactions: Transaction[] = [
   { id: '6', date: '2024-07-19', description: 'Groceries', category: 'Food', amount: 95, type: 'expense' },
   { id: '7', date: '2024-07-15', description: 'Transport - Week 3', category: 'Transport', amount: 80, type: 'expense' },
   { id: '8', date: '2024-07-12', description: 'Takeout', category: 'Food', amount: 85, type: 'expense' },
-  { id: '9', date: '2024-07-08', description: 'Transport - Week 2', category: 'Transport', amount: 80, type-expense' },
+  { id: '9', date: '2024-07-08', description: 'Transport - Week 2', category: 'Transport', amount: 80, type: 'expense' },
   { id: '10', date: '2024-07-05', description: 'Groceries', category: 'Food', amount: 100, type: 'expense' },
   { id: '11', date: '2024-07-01', description: 'Transport - Week 1', category: 'Transport', amount: 80, type: 'expense' },
 ];
@@ -28,6 +28,6 @@ export const liabilities: Liability[] = [
 export const budgets: Budget[] = [
   { id: '1', category: 'Food', allocated: 400, spent: 400 },
   { id: '2', category: 'Transport', allocated: 320, spent: 320 },
-  { id'3', category: 'Housing', allocated: 1000, spent: 1000 },
+  { id: '3', category: 'Housing', allocated: 1000, spent: 1000 },
   { id: '4', category: 'Other', allocated: 180, spent: 0 },
 ];

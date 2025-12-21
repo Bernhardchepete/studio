@@ -38,12 +38,12 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center gap-1",
-                isActive ? "text-primary font-semibold" : "text-muted-foreground"
+                "flex flex-col items-center justify-center gap-1 p-2",
+                isActive ? "text-primary" : "text-muted-foreground"
               )}
             >
-              <item.icon className="h-5 w-5" />
-              <span>{item.label}</span>
+              <item.icon className="h-6 w-6" />
+              <span className="sr-only">{item.label}</span>
             </Link>
           );
         })}

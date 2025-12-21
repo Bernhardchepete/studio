@@ -19,8 +19,6 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
 import {
   ArrowUpRight,
   ArrowDownLeft,
@@ -28,9 +26,6 @@ import {
   Wallet,
   Sparkles,
   Loader2,
-  Bot,
-  BrainCircuit,
-  ShieldCheck,
 } from "lucide-react";
 import {
   Bar,
@@ -43,7 +38,7 @@ import {
 import { formatCurrency } from "@/lib/utils";
 import { assets, liabilities, transactions, budgets } from "@/lib/data";
 import Link from "next/link";
-import { useMemo, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { generateFinancialSummary } from '@/ai/flows/generate-financial-summary';
 
 const totalAssets = assets.reduce((sum, asset) => sum + asset.value, 0);
@@ -88,59 +83,6 @@ const overviewData = [
   },
 ];
 
-export function DigitalTwinCard() {
-  return (
-    <Card className="bg-gradient-to-br from-primary/10 to-background shadow-lg border-primary/20">
-      <CardHeader>
-        <div className="flex justify-between items-start">
-            <div>
-                 <CardTitle className="text-primary flex items-center gap-2">
-                    <BrainCircuit className="h-6 w-6" />
-                    Your Digital Twin
-                </CardTitle>
-                <CardDescription>
-                    Your AI financial advisor is active.
-                </CardDescription>
-            </div>
-            <Badge variant="outline" className="flex items-center gap-1 border-green-500/50 bg-green-500/10 text-green-700 dark:text-green-400">
-                <ShieldCheck className="h-3 w-3" />
-                Stable
-            </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm italic text-muted-foreground">"I protected your transport budget today by flagging a potential overspend."</p>
-        <div className="space-y-3">
-             <div className="flex justify-between items-center">
-                <Label htmlFor="autonomy-slider" className="text-xs font-medium">Autonomy Level</Label>
-                <span className="text-xs font-bold text-primary">Assisted</span>
-            </div>
-            <Slider
-                id="autonomy-slider"
-                defaultValue={[2]}
-                max={3}
-                step={1}
-                className="w-full"
-            />
-            <div className="flex justify-between text-xs text-muted-foreground -mt-1">
-                <span>Manual</span>
-                <span>Assisted</span>
-                <span>Autonomous</span>
-            </div>
-        </div>
-      </CardContent>
-      <CardFooter className="flex gap-2">
-          <Button className="w-full">
-            <Bot className="mr-2 h-4 w-4"/>
-            Talk to Your Twin
-          </Button>
-          <Button variant="outline" className="w-full" asChild>
-            <Link href="/dashboard/digital-twin">Simulate a Decision</Link>
-          </Button>
-      </CardFooter>
-    </Card>
-  )
-}
 
 export function OverviewCards() {
   return (

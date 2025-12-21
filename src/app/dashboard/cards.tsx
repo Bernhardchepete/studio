@@ -135,7 +135,7 @@ export function DigitalTwinCard() {
             Talk to Your Twin
           </Button>
           <Button variant="outline" className="w-full" asChild>
-            <Link href="/dashboard/simulator">Simulate a Decision</Link>
+            <Link href="/dashboard/digital-twin">Simulate a Decision</Link>
           </Button>
       </CardFooter>
     </Card>

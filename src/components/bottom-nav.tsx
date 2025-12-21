@@ -8,7 +8,7 @@ import {
   ArrowLeftRight,
   PiggyBank,
   Wallet,
-  Bot,
+  BrainCircuit,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +17,7 @@ const menuItems = [
   { href: "/dashboard/transactions", label: "Transactions", icon: ArrowLeftRight },
   { href: "/dashboard/budgets", label: "Budgets", icon: PiggyBank },
   { href: "/dashboard/assets", label: "Assets", icon: Wallet },
-  { href: "/dashboard/simulator", label: "Simulate", icon: Bot },
+  { href: "/dashboard/digital-twin", label: "Digital Twin", icon: BrainCircuit },
 ];
 
 export function BottomNav() {

@@ -11,7 +11,7 @@ import {
   PiggyBank,
   Wallet,
   Settings,
-  Bot,
+  BrainCircuit,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
@@ -21,7 +21,7 @@ const menuItems = [
   { href: '/dashboard/transactions', label: 'Transactions', icon: ArrowLeftRight },
   { href: '/dashboard/budgets', label: 'Budgets', icon: PiggyBank },
   { href: '/dashboard/assets', label: 'Assets & Debts', icon: Wallet },
-  { href: '/dashboard/simulator', label: 'Simulator', icon: Bot },
+  { href: '/dashboard/digital-twin', label: 'Digital Twin', icon: BrainCircuit },
   { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];
 

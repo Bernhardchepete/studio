@@ -1,35 +1,33 @@
 import type { Transaction, Asset, Liability, Budget } from './types';
 
+// All amounts are in BWP (Pula)
+
 export const transactions: Transaction[] = [
-  { id: '1', date: '2024-07-28', description: 'Salary Deposit', category: 'Salary', amount: 5000, type: 'income' },
-  { id: '2', date: '2024-07-27', description: 'Grocery Shopping', category: 'Food', amount: 150, type: 'expense' },
-  { id: '3', date: '2024-07-26', description: 'Netflix Subscription', category: 'Entertainment', amount: 15.99, type: 'expense' },
-  { id: '4', date: '2024-07-25', description: 'Rent Payment', category: 'Housing', amount: 1200, type: 'expense' },
-  { id: '5', date: '2024-07-24', description: 'Gasoline', category: 'Transport', amount: 45, type: 'expense' },
-  { id: '6', date: '2024-07-23', description: 'Electricity Bill', category: 'Utilities', amount: 75, type: 'expense' },
-  { id: '7', date: '2024-07-22', description: 'Dinner with friends', category: 'Entertainment', amount: 60, type: 'expense' },
-  { id: '8', date: '2024-07-20', description: 'Freelance Project', category: 'Income', amount: 750, type: 'income' },
-  { id: '9', date: '2024-07-18', description: 'Stock Investment', category: 'Investment', amount: 500, type: 'expense' },
+  { id: '1', date: '2024-07-28', description: 'School Allowance', category: 'Allowance', amount: 1900, type: 'income' },
+  { id: '2', date: '2024-07-25', description: 'Side Hustle Payment', category: 'Income', amount: 600, type: 'income' },
+  { id: '3', date: '2024-07-01', description: 'Rent', category: 'Housing', amount: 1000, type: 'expense' },
+  { id: '4', date: '2024-07-26', description: 'Groceries', category: 'Food', amount: 120, type: 'expense' },
+  { id: '5', date: '2024-07-22', description: 'Transport - Week 4', category: 'Transport', amount: 80, type: 'expense' },
+  { id: '6', date: '2024-07-19', description: 'Groceries', category: 'Food', amount: 95, type: 'expense' },
+  { id: '7', date: '2024-07-15', description: 'Transport - Week 3', category: 'Transport', amount: 80, type: 'expense' },
+  { id: '8', date: '2024-07-12', description: 'Takeout', category: 'Food', amount: 85, type: 'expense' },
+  { id: '9', date: '2024-07-08', description: 'Transport - Week 2', category: 'Transport', amount: 80, type-expense' },
+  { id: '10', date: '2024-07-05', description: 'Groceries', category: 'Food', amount: 100, type: 'expense' },
+  { id: '11', date: '2024-07-01', description: 'Transport - Week 1', category: 'Transport', amount: 80, type: 'expense' },
 ];
 
 export const assets: Asset[] = [
-  { id: '1', name: 'Checking Account', type: 'Bank Account', value: 8500 },
-  { id: '2', name: 'Savings Account', type: 'Bank Account', value: 15000 },
-  { id: '3', name: 'Stock Portfolio', type: 'Investment', value: 25000 },
-  { id: '4', name: 'Real Estate', type: 'Property', value: 250000 },
+  { id: '1', name: 'Student Account', type: 'Bank Account', value: 2100 },
+  { id: '2', name: 'Savings Pocket', type: 'Bank Account', value: 800 },
 ];
 
 export const liabilities: Liability[] = [
-  { id: '1', name: 'Mortgage', type: 'Loan', amount: 180000 },
-  { id: '2', name: 'Car Loan', type: 'Loan', amount: 15000 },
-  { id: '3', name: 'Credit Card Debt', type: 'Credit', amount: 2500 },
+  { id: '1', name: 'Student Loan', type: 'Loan', amount: 5000 },
 ];
 
 export const budgets: Budget[] = [
-  { id: '1', category: 'Food', allocated: 500, spent: 320 },
-  { id: '2', category: 'Transport', allocated: 200, spent: 110 },
-  { id: '3', category: 'Entertainment', allocated: 250, spent: 180 },
-  { id: '4', category: 'Housing', allocated: 1500, spent: 1200 },
-  { id: '5', category: 'Utilities', allocated: 150, spent: 75 },
-  { id: '6', category: 'Other', allocated: 300, spent: 50 },
+  { id: '1', category: 'Food', allocated: 400, spent: 400 },
+  { id: '2', category: 'Transport', allocated: 320, spent: 320 },
+  { id'3', category: 'Housing', allocated: 1000, spent: 1000 },
+  { id: '4', category: 'Other', allocated: 180, spent: 0 },
 ];

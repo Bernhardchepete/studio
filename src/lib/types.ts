@@ -2,7 +2,7 @@ export type Transaction = {
   id: string;
   date: string;
   description: string;
-  category: 'Income' | 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Salary';
+  category: 'Income' | 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Salary' | 'Allowance';
   amount: number;
   type: 'income' | 'expense';
 };

@@ -26,6 +26,7 @@ export default function SimulatorPage() {
     assets,
     liabilities,
     transactions,
+    financialGoals: "Saving for a trip to Cape Town at the end of the year.",
   }, null, 2);
 
   const handleSimulate = () => {
@@ -72,7 +73,7 @@ export default function SimulatorPage() {
                 <Label htmlFor="scenario">What if I...</Label>
                 <Textarea
                   id="scenario"
-                  placeholder="e.g., increase my savings by $500 per month, buy a car for $25,000 with a loan, or change my salary to $80,000."
+                  placeholder="e.g., save BWP 500 more per month, or what if my side hustle income increases by 20%?"
                   value={scenario}
                   onChange={(e) => setScenario(e.target.value)}
                   className="h-24"

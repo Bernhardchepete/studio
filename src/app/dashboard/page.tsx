@@ -1,5 +1,6 @@
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
+  DigitalTwinCard,
   OverviewCards,
   RecentTransactionsCard,
   BudgetProgressCard,
@@ -13,6 +14,9 @@ export default function Dashboard() {
       <DashboardHeader title="Dashboard" />
       <main className="flex-1 p-4 sm:p-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="lg:col-span-4">
+            <DigitalTwinCard />
+          </div>
           <OverviewCards />
           <div className="lg:col-span-2">
             <CashflowChartCard />

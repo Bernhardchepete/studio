@@ -70,7 +70,7 @@ export default function TransactionsPage() {
   return (
     <div className="flex flex-1 flex-col">
       <DashboardHeader title="Transactions" />
-      <main className="flex-1 p-4 sm:p-6">
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6">
         <div className="mb-6 space-y-4">
             <Card>
                 <CardHeader>
@@ -99,7 +99,7 @@ export default function TransactionsPage() {
                                 <div className="space-y-2">
                                     <Label htmlFor="amount">Amount (BWP)</Label>
                                     <Input id="amount" name="amount" type="number" placeholder="0.00" required />
-                               _</div>
+                                </div>
                                 <DialogFooter>
                                     <Button type="submit">Send Payment</Button>
                                 </DialogFooter>

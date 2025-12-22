@@ -23,14 +23,12 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  Bar,
-  BarChart,
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
 import { transactions, investments, goals, sixMonthPerformance } from "@/lib/data";
 import { useState, useTransition } from "react";
 import { generateFinancialSummary } from '@/ai/flows/generate-financial-summary';
-import { ChartTooltipContent } from "@/components/ui/chart";
+import { Button } from "@/components/ui/button";
 
 const totalIncome = transactions
   .filter((t) => t.type === "income")

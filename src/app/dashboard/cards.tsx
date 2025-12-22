@@ -192,7 +192,7 @@ export function AIInsightsCard() {
           )}
           Generate
         </Button>
-      </Header>
+      </CardHeader>
       <CardContent>
         {isPending && (
           <div className="space-y-2">

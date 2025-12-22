@@ -28,18 +28,15 @@ import { investments as initialInvestments } from "@/lib/data";
 import type { Investment } from '@/lib/types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const INTEREST_RATE = 0.25; // 25%
-const WEALTHWISE_CUT = 0.05; // 5%
-const USER_CUT = 0.20; // 20%
+const ANNUAL_USER_RATE = 0.20; // 20%
+const MONTHLY_USER_RATE = ANNUAL_USER_RATE / 12;
 
 export default function InvestmentsPage() {
   const [investments, setInvestments] = useState<Investment[]>(initialInvestments);
   const [investmentAmount, setInvestmentAmount] = useState('');
 
   const totalInvested = investments.reduce((sum, inv) => sum + inv.amount, 0);
-  const annualReturn = totalInvested * USER_CUT;
-  const projectedValue = totalInvested + annualReturn;
-
+  
   const handleInvest = () => {
     const amount = parseFloat(investmentAmount);
     if (!amount || amount <= 0) return;
@@ -55,10 +52,17 @@ export default function InvestmentsPage() {
     setInvestmentAmount('');
   };
 
-  const chartData = [
-    { name: 'Start', value: totalInvested },
-    { name: 'Year 1', value: projectedValue },
-  ];
+  const chartData = Array.from({ length: 13 }, (_, i) => {
+    const monthName = new Date(2024, i, 1).toLocaleString('default', { month: 'short' });
+    const value = totalInvested * Math.pow(1 + MONTHLY_USER_RATE, i);
+    return { name: i === 0 ? 'Start' : monthName, value };
+  });
+
+  const projectedValue1Month = totalInvested * (1 + MONTHLY_USER_RATE);
+  const projectedValue12Months = totalInvested * Math.pow(1 + MONTHLY_USER_RATE, 12);
+  const monthlyReturn = totalInvested * MONTHLY_USER_RATE;
+  const annualReturn = projectedValue12Months - totalInvested;
+
 
   return (
     <div className="flex flex-1 flex-col">
@@ -68,7 +72,7 @@ export default function InvestmentsPage() {
             <Card>
             <CardHeader>
                 <CardTitle>Invest Your Money</CardTitle>
-                <CardDescription>Grow your wealth with a projected 20% annual return.</CardDescription>
+                <CardDescription>Grow your wealth with a projected 20% annual return, calculated monthly.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -82,7 +86,7 @@ export default function InvestmentsPage() {
                 />
                 </div>
                  <p className="text-sm text-muted-foreground">
-                    Based on a total 25% interest rate. You keep 20%, WealthWise receives 5%.
+                    Based on a total 25% annual interest rate. You keep 20%, WealthWise receives 5%. Returns are compounded monthly.
                 </p>
             </CardContent>
             <CardFooter>
@@ -91,7 +95,7 @@ export default function InvestmentsPage() {
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle>1-Year Projection</CardTitle>
+                    <CardTitle>12-Month Projection</CardTitle>
                     <CardDescription>Based on your current total investment.</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -146,12 +150,16 @@ export default function InvestmentsPage() {
                   <TableCell className="text-right">{formatCurrency(totalInvested)}</TableCell>
                 </TableRow>
                  <TableRow>
+                  <TableCell colSpan={2} className="text-muted-foreground">Projected Monthly Return</TableCell>
+                  <TableCell className="text-right text-green-600">{formatCurrency(monthlyReturn)}</TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell colSpan={2} className="text-muted-foreground">Projected Annual Return (20%)</TableCell>
                   <TableCell className="text-right text-green-600">{formatCurrency(annualReturn)}</TableCell>
                 </TableRow>
                 <TableRow className="text-lg font-bold">
-                  <TableCell colSpan={2}>Projected Value (1 Year)</TableCell>
-                  <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
+                  <TableCell colSpan={2}>Projected Value (12 Months)</TableCell>
+                  <TableCell className="text-right">{formatCurrency(projectedValue12Months)}</TableCell>
                 </TableRow>
               </TableFoot>
             </Table>

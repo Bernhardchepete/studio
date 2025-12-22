@@ -25,7 +25,7 @@ export default function DashboardLayout({
         </SidebarContent>
       </Sidebar>
       <SidebarInset>
-        <div className="flex-1 pb-16 md:pb-0">{children}</div>
+        <div className="flex-1 pb-16 md:pb-0 h-screen overflow-hidden">{children}</div>
         <BottomNav />
       </SidebarInset>
     </SidebarProvider>

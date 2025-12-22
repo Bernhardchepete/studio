@@ -68,7 +68,7 @@ export default function TransactionsPage() {
 
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col h-full">
       <DashboardHeader title="Transactions" />
       <main className="flex-1 overflow-y-auto p-4 sm:p-6">
         <div className="mb-6 space-y-4">

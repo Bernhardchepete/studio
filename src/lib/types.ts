@@ -26,6 +26,8 @@ export type Budget = {
   category: 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other';
   allocated: number;
   spent: number;
+  priority: 'High' | 'Medium' | 'Low';
+  paymentMethod: 'Automatic' | 'Manual' | 'Confirmation';
 };
 
 export type Investment = {

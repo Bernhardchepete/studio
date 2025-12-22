@@ -26,10 +26,10 @@ export const liabilities: Liability[] = [
 ];
 
 export const budgets: Budget[] = [
-  { id: '1', category: 'Food', allocated: 400, spent: 400 },
-  { id: '2', category: 'Transport', allocated: 320, spent: 320 },
-  { id: '3', category: 'Housing', allocated: 1000, spent: 1000 },
-  { id: '4', category: 'Other', allocated: 180, spent: 0 },
+  { id: '1', category: 'Housing', allocated: 1000, spent: 1000, priority: 'High', paymentMethod: 'Automatic' },
+  { id: '2', category: 'Food', allocated: 400, spent: 400, priority: 'High', paymentMethod: 'Manual' },
+  { id: '3', category: 'Transport', allocated: 320, spent: 320, priority: 'Medium', paymentMethod: 'Confirmation' },
+  { id: '4', category: 'Other', allocated: 180, spent: 0, priority: 'Low', paymentMethod: 'Manual' },
 ];
 
 export const investments: Investment[] = [

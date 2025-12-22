@@ -12,7 +12,8 @@ import {
   Settings,
   BrainCircuit,
   TrendingUp,
-  Target
+  Target,
+  Receipt
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
@@ -23,6 +24,7 @@ const menuItems = [
   { href: '/dashboard/budgets', label: 'Budgets', icon: PiggyBank },
   { href: '/dashboard/goals', label: 'Goals', icon: Target },
   { href: '/dashboard/investments', label: 'Investments', icon: TrendingUp },
+  { href: '/dashboard/receipts', label: 'Receipts', icon: Receipt },
   { href: '/dashboard/digital-twin', label: 'Digital Twin', icon: BrainCircuit },
   { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];

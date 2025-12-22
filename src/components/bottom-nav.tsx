@@ -9,7 +9,8 @@ import {
   BrainCircuit,
   TrendingUp,
   Target,
-  PiggyBank
+  PiggyBank,
+  Receipt,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +20,7 @@ const menuItems = [
   { href: "/dashboard/budgets", label: "Budgets", icon: PiggyBank },
   { href: "/dashboard/investments", label: "Investments", icon: TrendingUp },
   { href: "/dashboard/goals", label: "Goals", icon: Target },
-  { href: "/dashboard/digital-twin", label: "Digital Twin", icon: BrainCircuit },
+  { href: "/dashboard/receipts", label: "Receipts", icon: Receipt },
 ];
 
 export function BottomNav() {
@@ -30,10 +31,16 @@ export function BottomNav() {
     return null;
   }
 
+  const extendedMenuItems = [
+    ...menuItems,
+    { href: "/dashboard/digital-twin", label: "Digital Twin", icon: BrainCircuit },
+  ];
+  const itemsToShow = extendedMenuItems.slice(0, 6);
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-sm md:hidden">
       <div className="grid h-16 grid-cols-6 items-center justify-center text-xs">
-        {menuItems.map((item) => {
+        {itemsToShow.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link

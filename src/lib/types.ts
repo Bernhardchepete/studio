@@ -37,3 +37,15 @@ export type Goal = {
   deadline: string;
   description: string;
 };
+
+export type Receipt = {
+    id: string;
+    merchant: string;
+    date: string;
+    items: { name: string; quantity: number; price: number }[];
+    subtotal: number;
+    tax: number;
+    total: number;
+    category: 'Food' | 'Transport' | 'Utilities' | 'Other';
+    paymentMethod: string;
+};

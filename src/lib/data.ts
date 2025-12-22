@@ -1,4 +1,4 @@
-import type { Transaction, Budget, Investment, Goal } from './types';
+import type { Transaction, Budget, Investment, Goal, Receipt } from './types';
 
 // All amounts are in BWP (Pula)
 
@@ -58,3 +58,45 @@ export const sixMonthPerformance = [
     { month: 'Jun', income: 2600, expenses: 2100, net: 500 },
     { month: 'Jul', income: 2500, expenses: 1900, net: 600 },
 ];
+
+export const receipts: Receipt[] = [
+    {
+      id: '1',
+      merchant: 'Shoprite',
+      date: '2024-07-26',
+      items: [
+        { name: 'Milk 1L', quantity: 2, price: 24.00 },
+        { name: 'Brown Bread', quantity: 1, price: 10.00 },
+        { name: 'Eggs 12-pack', quantity: 1, price: 26.00 },
+        { name: 'Chicken Breasts 1kg', quantity: 1, price: 60.00 },
+      ],
+      subtotal: 120.00,
+      tax: 0.00,
+      total: 120.00,
+      category: 'Food',
+      paymentMethod: 'Card',
+    },
+    {
+      id: '2',
+      merchant: 'Engen',
+      date: '2024-07-22',
+      items: [{ name: 'Fuel', quantity: 1, price: 80.00 }],
+      subtotal: 80.00,
+      tax: 0.00,
+      total: 80.00,
+      category: 'Transport',
+      paymentMethod: 'Card',
+    },
+    {
+        id: '3',
+        merchant: 'Chicken Licken',
+        date: '2024-07-12',
+        items: [{ name: 'Streetwise 2', quantity: 2, price: 85.00 }],
+        subtotal: 85.00,
+        tax: 0.00,
+        total: 85.00,
+        category: 'Food',
+        paymentMethod: 'Cash',
+      },
+  ];
+  

@@ -15,7 +15,7 @@ import { Bot, Loader2 } from 'lucide-react';
 import { assets, liabilities, transactions } from '@/lib/data';
 import { simulateFinancialScenario } from '@/ai/flows/financial-scenario-simulator';
 
-export default function SimulatorPage() {
+export default function DigitalTwinPage() {
   const [scenario, setScenario] = useState('');
   const [isPending, startTransition] = useTransition();
   const [prediction, setPrediction] = useState('');
@@ -41,7 +41,7 @@ export default function SimulatorPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <DashboardHeader title="Scenario Simulator" />
+      <DashboardHeader title="Digital Twin" />
       <main className="flex-1 p-4 sm:p-6">
         <div className="max-w-3xl mx-auto space-y-6">
           <Card>

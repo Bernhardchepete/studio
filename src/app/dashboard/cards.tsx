@@ -107,90 +107,6 @@ export function OverviewCards() {
   );
 }
 
-export function RecentTransactionsCard() {
-  const recentTransactions = transactions.slice(0, 5);
-
-  return (
-    <Card className="h-full">
-      <CardHeader>
-        <CardTitle>Recent Transactions</CardTitle>
-        <CardDescription>
-          Your latest financial activities.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Description</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {recentTransactions.map((transaction) => (
-              <TableRow key={transaction.id}>
-                <TableCell>
-                  <div className="font-medium">{transaction.description}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {transaction.category}
-                  </div>
-                </TableCell>
-                <TableCell
-                  className={`text-right font-medium ${
-                    transaction.type === "income"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {transaction.type === "income" ? "+" : "-"}
-                  {formatCurrency(transaction.amount)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-      <CardFooter className="justify-end">
-        <Button asChild variant="ghost" size="sm">
-            <Link href="/dashboard/transactions">View All</Link>
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-}
-
-export function BudgetProgressCard() {
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Budget Progress</CardTitle>
-                <CardDescription>How you're tracking against your monthly budgets.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                {budgets.map(budget => {
-                    const progress = (budget.spent / budget.allocated) * 100;
-                    return (
-                        <div key={budget.id}>
-                            <div className="flex justify-between mb-1">
-                                <span className="text-sm font-medium">{budget.category}</span>
-                                <span className="text-sm text-muted-foreground">
-                                    {formatCurrency(budget.spent)} / {formatCurrency(budget.allocated)}
-                                </span>
-                            </div>
-                            <Progress value={progress} />
-                        </div>
-                    )
-                })}
-            </CardContent>
-            <CardFooter className="justify-end">
-                <Button asChild variant="ghost" size="sm">
-                    <Link href="/dashboard/budgets">Manage Budgets</Link>
-                </Button>
-            </CardFooter>
-        </Card>
-    )
-}
-
 export function CashflowChartCard() {
     const data = [
         { name: 'Income', value: totalIncome },
@@ -276,7 +192,7 @@ export function AIInsightsCard() {
           )}
           Generate
         </Button>
-      </CardHeader>
+      </Header>
       <CardContent>
         {isPending && (
           <div className="space-y-2">

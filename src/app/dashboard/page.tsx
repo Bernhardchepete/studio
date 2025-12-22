@@ -1,8 +1,6 @@
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
   OverviewCards,
-  RecentTransactionsCard,
-  BudgetProgressCard,
   CashflowChartCard,
   AIInsightsCard
 } from "./cards";
@@ -17,11 +15,8 @@ export default function Dashboard() {
           <div className="lg:col-span-4">
             <AIInsightsCard />
           </div>
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-4">
             <CashflowChartCard />
-          </div>
-          <div className="lg:col-span-2">
-            <RecentTransactionsCard />
           </div>
         </div>
       </main>

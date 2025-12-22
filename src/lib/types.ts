@@ -5,6 +5,12 @@ export type Transaction = {
   category: 'Income' | 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Salary' | 'Allowance';
   amount: number;
   type: 'income' | 'expense';
+  details?: {
+    items?: string[];
+    from?: string;
+    to?: string;
+    [key: string]: any;
+  }
 };
 
 export type Budget = {

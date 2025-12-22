@@ -6,14 +6,14 @@ export const transactions: Transaction[] = [
   { id: '1', date: '2024-07-28', description: 'School Allowance', category: 'Allowance', amount: 1900, type: 'income' },
   { id: '2', date: '2024-07-25', description: 'Side Hustle Payment', category: 'Income', amount: 600, type: 'income' },
   { id: '3', date: '2024-07-01', description: 'Rent', category: 'Housing', amount: 1000, type: 'expense' },
-  { id: '4', date: '2024-07-26', description: 'Groceries', category: 'Food', amount: 120, type: 'expense' },
-  { id: '5', date: '2024-07-22', description: 'Transport - Week 4', category: 'Transport', amount: 80, type: 'expense' },
-  { id: '6', date: '2024-07-19', description: 'Groceries', category: 'Food', amount: 95, type: 'expense' },
-  { id: '7', date: '2024-07-15', description: 'Transport - Week 3', category: 'Transport', amount: 80, type: 'expense' },
+  { id: '4', date: '2024-07-26', description: 'Weekly Groceries', category: 'Food', amount: 120, type: 'expense', details: { items: ['Milk', 'Bread', 'Eggs', 'Chicken Breasts', 'Rice'] } },
+  { id: '5', date: '2024-07-22', description: 'Trip to University', category: 'Transport', amount: 80, type: 'expense', details: { from: 'Home (Gaborone West)', to: 'University of Botswana' } },
+  { id: '6', date: '2024-07-19', description: 'Groceries', category: 'Food', amount: 95, type: 'expense', details: { items: ['Apples', 'Yogurt', 'Cereal', 'Snacks'] } },
+  { id: '7', date: '2024-07-15', description: 'Trip to Mall', category: 'Transport', amount: 80, type: 'expense', details: { from: 'Home', to: 'Game City Mall' } },
   { id: '8', date: '2024-07-12', description: 'Takeout', category: 'Food', amount: 85, type: 'expense' },
-  { id: '9', date: '2024-07-08', description: 'Transport - Week 2', category: 'Transport', amount: 80, type: 'expense' },
-  { id: '10', date: '2024-07-05', description: 'Groceries', category: 'Food', amount: 100, type: 'expense' },
-  { id: '11', date: '2024-07-01', description: 'Transport - Week 1', category: 'Transport', amount: 80, type: 'expense' },
+  { id: '9', date: '2024-07-08', description: 'Commute to Intern', category: 'Transport', amount: 80, type: 'expense', details: { from: 'Home', to: 'BTC Office' } },
+  { id: '10', date: '2024-07-05', description: 'Groceries', category: 'Food', amount: 100, type: 'expense', details: { items: ['Pasta', 'Sauce', 'Vegetables'] } },
+  { id: '11', date: '2024-07-01', description: 'Commute to Intern', category: 'Transport', amount: 80, type: 'expense', details: { from: 'Home', to: 'BTC Office' } },
 ];
 
 export const budgets: Budget[] = [

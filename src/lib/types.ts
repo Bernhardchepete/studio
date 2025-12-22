@@ -2,7 +2,7 @@ export type Transaction = {
   id: string;
   date: string;
   description: string;
-  category: 'Income' | 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Salary' | 'Allowance';
+  category: 'Income' | 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Salary' | 'Allowance' | 'Cape Town Trip';
   amount: number;
   type: 'income' | 'expense';
   details?: {
@@ -15,7 +15,7 @@ export type Transaction = {
 
 export type Budget = {
   id: string;
-  category: 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other';
+  category: 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Cape Town Trip';
   allocated: number;
   spent: number;
   priority: 'High' | 'Medium' | 'Low';

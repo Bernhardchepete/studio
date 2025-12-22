@@ -16,11 +16,23 @@ export const transactions: Transaction[] = [
   { id: '11', date: '2024-07-01', description: 'Commute to Intern', category: 'Transport', amount: 80, type: 'expense', details: { from: 'Home', to: 'BTC Office' } },
 ];
 
+const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0); // 2500
+const existingBudgets = [
+    { id: '1', category: 'Housing', allocated: 1000, spent: 1000, priority: 'High', paymentMethod: 'Automatic' },
+    { id: '2', category: 'Food', allocated: 400, spent: 400, priority: 'High', paymentMethod: 'Manual' },
+    { id: '3', category: 'Transport', allocated: 320, spent: 320, priority: 'Medium', paymentMethod: 'Confirmation' },
+    { id: '4', category: 'Other', allocated: 180, spent: 0, priority: 'Low', paymentMethod: 'Manual' },
+];
+const totalBudgeted = existingBudgets.reduce((sum, b) => sum + b.allocated, 0); // 1900
+const whatsLeft = totalIncome - totalBudgeted; // 600
+const investmentAmount = whatsLeft * 0.6; // 360
+const goalAmount = whatsLeft * 0.4; // 240
+
+
 export const budgets: Budget[] = [
-  { id: '1', category: 'Housing', allocated: 1000, spent: 1000, priority: 'High', paymentMethod: 'Automatic' },
-  { id: '2', category: 'Food', allocated: 400, spent: 400, priority: 'High', paymentMethod: 'Manual' },
-  { id: '3', category: 'Transport', allocated: 320, spent: 320, priority: 'Medium', paymentMethod: 'Confirmation' },
-  { id: '4', category: 'Other', allocated: 180, spent: 0, priority: 'Low', paymentMethod: 'Manual' },
+    ...existingBudgets,
+    { id: '5', category: 'Investment', allocated: investmentAmount, spent: 0, priority: 'High', paymentMethod: 'Automatic' },
+    { id: '6', category: 'Cape Town Trip', allocated: goalAmount, spent: 0, priority: 'High', paymentMethod: 'Automatic' },
 ];
 
 export const investments: Investment[] = [

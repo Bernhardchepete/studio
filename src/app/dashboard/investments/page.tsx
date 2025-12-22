@@ -58,11 +58,8 @@ export default function InvestmentsPage() {
     return { name: i === 0 ? 'Start' : monthName, value };
   });
 
-  const projectedValue1Month = totalInvested * (1 + MONTHLY_USER_RATE);
   const projectedValue12Months = totalInvested * Math.pow(1 + MONTHLY_USER_RATE, 12);
   const monthlyReturn = totalInvested * MONTHLY_USER_RATE;
-  const annualReturn = projectedValue12Months - totalInvested;
-
 
   return (
     <div className="flex flex-1 flex-col">
@@ -96,7 +93,7 @@ export default function InvestmentsPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>12-Month Projection</CardTitle>
-                    <CardDescription>Based on your current total investment.</CardDescription>
+                    <CardDescription>Based on your current total investment and monthly compounding.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ResponsiveContainer width="100%" height={200}>
@@ -152,10 +149,6 @@ export default function InvestmentsPage() {
                  <TableRow>
                   <TableCell colSpan={2} className="text-muted-foreground">Projected Monthly Return</TableCell>
                   <TableCell className="text-right text-green-600">{formatCurrency(monthlyReturn)}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell colSpan={2} className="text-muted-foreground">Projected Annual Return (20%)</TableCell>
-                  <TableCell className="text-right text-green-600">{formatCurrency(annualReturn)}</TableCell>
                 </TableRow>
                 <TableRow className="text-lg font-bold">
                   <TableCell colSpan={2}>Projected Value (12 Months)</TableCell>

@@ -67,7 +67,7 @@ export default function DigitalTwinPage() {
                 ) : (
                   <Bot className="mr-2 h-4 w-4" />
                 )}
-                Ask Your Twin
+                Talk to Twin
               </Button>
             </CardContent>
           </Card>

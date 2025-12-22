@@ -12,8 +12,8 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const FinancialSummaryInputSchema = z.object({
-  assets: z.string().describe('A list of assets with their values.'),
-  liabilities: z.string().describe('A list of liabilities with their amounts.'),
+  assets: z.string().describe('A summary of assets, like investments and savings.'),
+  liabilities: z.string().describe('A summary of liabilities, if any.'),
   income: z.string().describe('A list of income sources and amounts.'),
   expenses: z.string().describe('A list of expenses with their amounts.'),
 });

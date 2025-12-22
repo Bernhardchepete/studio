@@ -9,10 +9,10 @@ import {
   LayoutDashboard,
   ArrowLeftRight,
   PiggyBank,
-  Wallet,
   Settings,
   BrainCircuit,
-  TrendingUp
+  TrendingUp,
+  Target
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
@@ -21,7 +21,7 @@ const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/dashboard/transactions', label: 'Transactions', icon: ArrowLeftRight },
   { href: '/dashboard/budgets', label: 'Budgets', icon: PiggyBank },
-  { href: '/dashboard/assets', label: 'Assets & Debts', icon: Wallet },
+  { href: '/dashboard/goals', label: 'Goals', icon: Target },
   { href: '/dashboard/investments', label: 'Investments', icon: TrendingUp },
   { href: '/dashboard/digital-twin', label: 'Digital Twin', icon: BrainCircuit },
   { href: '/dashboard/settings', label: 'Settings', icon: Settings },

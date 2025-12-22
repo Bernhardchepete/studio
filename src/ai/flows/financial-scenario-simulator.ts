@@ -12,7 +12,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
 const FinancialScenarioInputSchema = z.object({
-  currentFinancials: z.string().describe("A JSON string representing the user's current financial state, including income, expenses, assets, and liabilities."),
+  currentFinancials: z.string().describe("A JSON string representing the user's current financial state, including income, expenses, and financial goals."),
   scenario: z.string().describe('The financial change or scenario to simulate. For example, "What if my salary increases by 10%?" or "What if I buy a car for $20,000?"'),
 });
 export type FinancialScenarioInput = z.infer<typeof FinancialScenarioInputSchema>;

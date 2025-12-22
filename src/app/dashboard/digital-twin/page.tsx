@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Bot, Loader2 } from 'lucide-react';
-import { assets, liabilities, transactions } from '@/lib/data';
+import { transactions } from '@/lib/data';
 import { simulateFinancialScenario } from '@/ai/flows/financial-scenario-simulator';
 
 export default function DigitalTwinPage() {
@@ -21,8 +21,6 @@ export default function DigitalTwinPage() {
   const [prediction, setPrediction] = useState('');
 
   const currentFinancials = JSON.stringify({
-    assets,
-    liabilities,
     transactions,
     financialGoals: "Saving for a trip to Cape Town at the end of the year.",
   }, null, 2);

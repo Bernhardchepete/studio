@@ -1,4 +1,4 @@
-import type { Transaction, Asset, Liability, Budget, Investment } from './types';
+import type { Transaction, Budget, Investment, Goal } from './types';
 
 // All amounts are in BWP (Pula)
 
@@ -16,15 +16,6 @@ export const transactions: Transaction[] = [
   { id: '11', date: '2024-07-01', description: 'Transport - Week 1', category: 'Transport', amount: 80, type: 'expense' },
 ];
 
-export const assets: Asset[] = [
-  { id: '1', name: 'Student Account', type: 'Bank Account', value: 2100 },
-  { id: '2', name: 'Savings Pocket', type: 'Bank Account', value: 800 },
-];
-
-export const liabilities: Liability[] = [
-  { id: '1', name: 'Student Loan', type: 'Loan', amount: 5000 },
-];
-
 export const budgets: Budget[] = [
   { id: '1', category: 'Housing', allocated: 1000, spent: 1000, priority: 'High', paymentMethod: 'Automatic' },
   { id: '2', category: 'Food', allocated: 400, spent: 400, priority: 'High', paymentMethod: 'Manual' },
@@ -34,4 +25,15 @@ export const budgets: Budget[] = [
 
 export const investments: Investment[] = [
     { id: '1', name: 'WealthWise Growth Fund', amount: 500, startDate: '2024-06-01' }
+];
+
+export const goals: Goal[] = [
+  {
+    id: '1',
+    name: 'Trip to Cape Town',
+    description: 'A 5-day trip to explore the Mother City for my birthday.',
+    target: 7000,
+    saved: 2500,
+    deadline: '2024-12-15'
+  }
 ];

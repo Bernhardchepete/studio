@@ -6,26 +6,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  ArrowUpRight,
-  ArrowDownLeft,
   DollarSign,
   Wallet,
   Sparkles,
   Loader2,
+  TrendingUp,
+  Target
 } from "lucide-react";
 import {
   Bar,
@@ -36,17 +26,9 @@ import {
   Tooltip,
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
-import { assets, liabilities, transactions, budgets } from "@/lib/data";
-import Link from "next/link";
+import { transactions, investments, goals } from "@/lib/data";
 import { useState, useTransition } from "react";
 import { generateFinancialSummary } from '@/ai/flows/generate-financial-summary';
-
-const totalAssets = assets.reduce((sum, asset) => sum + asset.value, 0);
-const totalLiabilities = liabilities.reduce(
-  (sum, liability) => sum + liability.amount,
-  0
-);
-const netWorth = totalAssets - totalLiabilities;
 
 const totalIncome = transactions
   .filter((t) => t.type === "income")
@@ -54,32 +36,34 @@ const totalIncome = transactions
 const totalExpenses = transactions
   .filter((t) => t.type === "expense")
   .reduce((sum, t) => sum + t.amount, 0);
+const totalInvested = investments.reduce((sum, inv) => sum + inv.amount, 0);
+const totalGoalSavings = goals.reduce((sum, goal) => sum + goal.saved, 0);
+
 
 const overviewData = [
   {
-    title: "Net Worth",
-    value: netWorth,
-    icon: Wallet,
-    change: "+$2,019.00 from last month",
-  },
-  {
     title: "Monthly Income",
     value: totalIncome,
-    icon: ArrowUpRight,
+    icon: DollarSign,
     change: "+12% from last month",
   },
   {
     title: "Monthly Expenses",
     value: totalExpenses,
-    icon: ArrowDownLeft,
+    icon: Wallet,
     change: "-5% from last month",
   },
   {
-    title: "Savings Rate",
-    value: ((totalIncome - totalExpenses) / totalIncome) * 100,
-    icon: DollarSign,
-    isPercentage: true,
-    change: "+3% from last month",
+    title: "Total Invested",
+    value: totalInvested,
+    icon: TrendingUp,
+    change: "20% avg. return",
+  },
+  {
+    title: "Goal Savings",
+    value: totalGoalSavings,
+    icon: Target,
+    change: "On track for Cape Town!",
   },
 ];
 
@@ -95,9 +79,7 @@ export function OverviewCards() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {item.isPercentage
-                ? `${item.value.toFixed(2)}%`
-                : formatCurrency(item.value)}
+              {formatCurrency(item.value)}
             </div>
             <p className="text-xs text-muted-foreground">{item.change}</p>
           </CardContent>
@@ -109,8 +91,8 @@ export function OverviewCards() {
 
 export function CashflowChartCard() {
     const data = [
-        { name: 'Income', value: totalIncome },
-        { name: 'Expenses', value: totalExpenses },
+        { name: 'Income', value: totalIncome, fill: 'hsl(var(--primary))' },
+        { name: 'Expenses', value: totalExpenses, fill: 'hsl(var(--accent))' },
     ]
     return (
         <Card>
@@ -136,13 +118,7 @@ export function CashflowChartCard() {
                                 return null
                             }}
                         />
-                        <Bar dataKey="value" radius={[0, 4, 4, 0]} >
-                            {
-                                data.map((entry, index) => (
-                                    <rect key={`cell-${index}`} fill={index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--accent))'} />
-                                ))
-                            }
-                        </Bar>
+                        <Bar dataKey="value" radius={[0, 4, 4, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
             </CardContent>
@@ -157,14 +133,12 @@ export function AIInsightsCard() {
 
   const handleGenerateSummary = () => {
     startTransition(async () => {
-      const assetsString = assets.map(a => `${a.name}: ${formatCurrency(a.value)}`).join(', ');
-      const liabilitiesString = liabilities.map(l => `${l.name}: ${formatCurrency(l.amount)}`).join(', ');
       const incomeString = transactions.filter(t => t.type === 'income').map(t => `${t.description}: ${formatCurrency(t.amount)}`).join(', ');
       const expensesString = transactions.filter(t => t.type === 'expense').map(t => `${t.category} - ${t.description}: ${formatCurrency(t.amount)}`).join(', ');
       
       const result = await generateFinancialSummary({
-        assets: assetsString,
-        liabilities: liabilitiesString,
+        assets: `Total Investments: ${formatCurrency(totalInvested)}, Goal Savings: ${formatCurrency(totalGoalSavings)}`,
+        liabilities: 'No liabilities',
         income: incomeString,
         expenses: expensesString,
       });

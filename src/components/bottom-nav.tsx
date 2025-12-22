@@ -6,10 +6,9 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   ArrowLeftRight,
-  PiggyBank,
-  Wallet,
   BrainCircuit,
-  TrendingUp
+  TrendingUp,
+  Target
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +17,7 @@ const menuItems = [
   { href: "/dashboard/transactions", label: "Transactions", icon: ArrowLeftRight },
   { href: "/dashboard/investments", label: "Investments", icon: TrendingUp },
   { href: "/dashboard/digital-twin", label: "Digital Twin", icon: BrainCircuit },
-  { href: "/dashboard/assets", label: "Assets", icon: Wallet },
+  { href: "/dashboard/goals", label: "Goals", icon: Target },
 ];
 
 export function BottomNav() {

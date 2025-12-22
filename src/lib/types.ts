@@ -7,20 +7,6 @@ export type Transaction = {
   type: 'income' | 'expense';
 };
 
-export type Asset = {
-  id: string;
-  name: string;
-  type: string;
-  value: number;
-};
-
-export type Liability = {
-  id:string;
-  name: string;
-  type: string;
-  amount: number;
-};
-
 export type Budget = {
   id: string;
   category: 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other';
@@ -35,4 +21,13 @@ export type Investment = {
   name: string;
   amount: number;
   startDate: string;
+};
+
+export type Goal = {
+  id: string;
+  name: string;
+  target: number;
+  saved: number;
+  deadline: string;
+  description: string;
 };

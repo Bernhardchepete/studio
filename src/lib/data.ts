@@ -49,3 +49,12 @@ export const goals: Goal[] = [
     deadline: '2024-12-15'
   }
 ];
+
+export const sixMonthPerformance = [
+    { month: 'Feb', income: 2200, expenses: 1800, net: 400 },
+    { month: 'Mar', income: 2300, expenses: 1900, net: 400 },
+    { month: 'Apr', income: 2400, expenses: 2000, net: 400 },
+    { month: 'May', income: 2350, expenses: 1950, net: 400 },
+    { month: 'Jun', income: 2600, expenses: 2100, net: 500 },
+    { month: 'Jul', income: 2500, expenses: 1900, net: 600 },
+];

@@ -1,7 +1,7 @@
 import { DashboardHeader } from "@/components/dashboard-header";
 import {
   OverviewCards,
-  CashflowChartCard,
+  PerformanceChartCard,
   AIInsightsCard
 } from "./cards";
 
@@ -16,7 +16,7 @@ export default function Dashboard() {
             <AIInsightsCard />
           </div>
           <div className="lg:col-span-4">
-            <CashflowChartCard />
+            <PerformanceChartCard />
           </div>
         </div>
       </main>

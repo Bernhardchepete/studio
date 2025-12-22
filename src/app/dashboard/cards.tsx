@@ -7,8 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
 import {
   DollarSign,
   Wallet,
@@ -18,17 +16,21 @@ import {
   Target
 } from "lucide-react";
 import {
-  Bar,
-  BarChart,
+  Line,
+  LineChart,
   ResponsiveContainer,
   XAxis,
   YAxis,
   Tooltip,
+  Legend,
+  Bar,
+  BarChart,
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
-import { transactions, investments, goals } from "@/lib/data";
+import { transactions, investments, goals, sixMonthPerformance } from "@/lib/data";
 import { useState, useTransition } from "react";
 import { generateFinancialSummary } from '@/ai/flows/generate-financial-summary';
+import { ChartTooltipContent } from "@/components/ui/chart";
 
 const totalIncome = transactions
   .filter((t) => t.type === "income")
@@ -89,37 +91,77 @@ export function OverviewCards() {
   );
 }
 
-export function CashflowChartCard() {
-    const data = [
-        { name: 'Income', value: totalIncome, fill: 'hsl(var(--primary))' },
-        { name: 'Expenses', value: totalExpenses, fill: 'hsl(var(--accent))' },
-    ]
+export function PerformanceChartCard() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Cash Flow</CardTitle>
-                <CardDescription>Your income vs. expenses this month.</CardDescription>
+                <CardTitle>6-Month Performance</CardTitle>
+                <CardDescription>Your income, expenses, and net savings over the last 6 months.</CardDescription>
             </CardHeader>
             <CardContent>
-                <ResponsiveContainer width="100%" height={250}>
-                    <BarChart data={data} layout="vertical" margin={{ left: -10 }}>
-                        <XAxis type="number" hide />
-                        <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} width={80} />
+                <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={sixMonthPerformance}>
+                        <XAxis
+                            dataKey="month"
+                            stroke="hsl(var(--muted-foreground))"
+                            fontSize={12}
+                            tickLine={false}
+                            axisLine={false}
+                        />
+                        <YAxis
+                            stroke="hsl(var(--muted-foreground))"
+                            fontSize={12}
+                            tickLine={false}
+                            axisLine={false}
+                            tickFormatter={(value) => formatCurrency(value, {notation: 'compact'})}
+                        />
                         <Tooltip
-                            cursor={{ fill: 'hsl(var(--muted))' }}
-                            content={({ active, payload }) => {
+                            content={({ active, payload, label }) => {
                                 if (active && payload && payload.length) {
                                 return (
                                     <div className="rounded-lg border bg-background p-2 shadow-sm">
-                                        <p className="font-bold">{`${payload[0].name}: ${formatCurrency(payload[0].value as number)}`}</p>
+                                        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                                            <div className="flex items-center">
+                                                <div className="font-semibold col-span-2 text-center mb-1">{label}</div>
+                                            </div>
+                                            <div className="font-medium text-muted-foreground">Income</div>
+                                            <div className="text-right">{formatCurrency(payload.find(p => p.dataKey === 'income')?.value as number)}</div>
+
+                                            <div className="font-medium text-muted-foreground">Expenses</div>
+                                            <div className="text-right">{formatCurrency(payload.find(p => p.dataKey === 'expenses')?.value as number)}</div>
+                                            
+                                            <div className="font-medium text-muted-foreground">Net Savings</div>
+                                            <div className="text-right font-bold">{formatCurrency(payload.find(p => p.dataKey === 'net')?.value as number)}</div>
+                                        </div>
                                     </div>
                                 )
                                 }
                                 return null
                             }}
                         />
-                        <Bar dataKey="value" radius={[0, 4, 4, 0]} />
-                    </BarChart>
+                        <Legend wrapperStyle={{fontSize: "0.875rem"}}/>
+                        <Line
+                            type="monotone"
+                            stroke="hsl(var(--primary))"
+                            dataKey="income"
+                            strokeWidth={2}
+                            dot={{ r: 4 }}
+                        />
+                        <Line
+                            type="monotone"
+                            stroke="hsl(var(--accent))"
+                            dataKey="expenses"
+                            strokeWidth={2}
+                             dot={{ r: 4 }}
+                        />
+                         <Line
+                            type="monotone"
+                            stroke="hsl(var(--chart-3))"
+                            dataKey="net"
+                            strokeWidth={2}
+                             dot={{ r: 4 }}
+                        />
+                    </LineChart>
                 </ResponsiveContainer>
             </CardContent>
         </Card>

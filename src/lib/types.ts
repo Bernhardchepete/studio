@@ -27,3 +27,10 @@ export type Budget = {
   allocated: number;
   spent: number;
 };
+
+export type Investment = {
+  id: string;
+  name: string;
+  amount: number;
+  startDate: string;
+};

@@ -12,6 +12,7 @@ import {
   Wallet,
   Settings,
   BrainCircuit,
+  TrendingUp
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
@@ -21,6 +22,7 @@ const menuItems = [
   { href: '/dashboard/transactions', label: 'Transactions', icon: ArrowLeftRight },
   { href: '/dashboard/budgets', label: 'Budgets', icon: PiggyBank },
   { href: '/dashboard/assets', label: 'Assets & Debts', icon: Wallet },
+  { href: '/dashboard/investments', label: 'Investments', icon: TrendingUp },
   { href: '/dashboard/digital-twin', label: 'Digital Twin', icon: BrainCircuit },
   { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];
@@ -32,7 +34,7 @@ export function Nav() {
     <SidebarMenu>
       {menuItems.map((item) => (
         <SidebarMenuItem key={item.href}>
-          <SidebarMenuButton
+           <SidebarMenuButton
               asChild
               isActive={pathname === item.href}
               tooltip={item.label}

@@ -9,15 +9,16 @@ import {
   PiggyBank,
   Wallet,
   BrainCircuit,
+  TrendingUp
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/transactions", label: "Transactions", icon: ArrowLeftRight },
-  { href: "/dashboard/budgets", label: "Budgets", icon: PiggyBank },
-  { href: "/dashboard/assets", label: "Assets", icon: Wallet },
+  { href: "/dashboard/investments", label: "Investments", icon: TrendingUp },
   { href: "/dashboard/digital-twin", label: "Digital Twin", icon: BrainCircuit },
+  { href: "/dashboard/assets", label: "Assets", icon: Wallet },
 ];
 
 export function BottomNav() {

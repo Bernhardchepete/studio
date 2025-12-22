@@ -1,4 +1,4 @@
-import type { Transaction, Asset, Liability, Budget } from './types';
+import type { Transaction, Asset, Liability, Budget, Investment } from './types';
 
 // All amounts are in BWP (Pula)
 
@@ -30,4 +30,8 @@ export const budgets: Budget[] = [
   { id: '2', category: 'Transport', allocated: 320, spent: 320 },
   { id: '3', category: 'Housing', allocated: 1000, spent: 1000 },
   { id: '4', category: 'Other', allocated: 180, spent: 0 },
+];
+
+export const investments: Investment[] = [
+    { id: '1', name: 'WealthWise Growth Fund', amount: 500, startDate: '2024-06-01' }
 ];

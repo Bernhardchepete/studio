@@ -1,0 +1,163 @@
+
+'use client';
+
+import { useState } from 'react';
+import { DashboardHeader } from "@/components/dashboard-header";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableFooter as TableFoot,
+} from "@/components/ui/table";
+import { formatCurrency } from "@/lib/utils";
+import { investments as initialInvestments } from "@/lib/data";
+import type { Investment } from '@/lib/types';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const INTEREST_RATE = 0.25; // 25%
+const WEALTHWISE_CUT = 0.05; // 5%
+const USER_CUT = 0.20; // 20%
+
+export default function InvestmentsPage() {
+  const [investments, setInvestments] = useState<Investment[]>(initialInvestments);
+  const [investmentAmount, setInvestmentAmount] = useState('');
+
+  const totalInvested = investments.reduce((sum, inv) => sum + inv.amount, 0);
+  const annualReturn = totalInvested * USER_CUT;
+  const projectedValue = totalInvested + annualReturn;
+
+  const handleInvest = () => {
+    const amount = parseFloat(investmentAmount);
+    if (!amount || amount <= 0) return;
+
+    // This is a simulation. In a real app, you'd check user's balance
+    const newInvestment: Investment = {
+      id: (investments.length + 1).toString(),
+      name: `WealthWise Growth Fund`,
+      amount,
+      startDate: new Date().toISOString(),
+    };
+    setInvestments([...investments, newInvestment]);
+    setInvestmentAmount('');
+  };
+
+  const chartData = [
+    { name: 'Start', value: totalInvested },
+    { name: 'Year 1', value: projectedValue },
+  ];
+
+  return (
+    <div className="flex flex-1 flex-col">
+      <DashboardHeader title="Investments" />
+      <main className="flex-1 p-4 sm:p-6 grid gap-6 md:grid-cols-2">
+        <div className="md:col-span-2 grid gap-6 lg:grid-cols-2">
+            <Card>
+            <CardHeader>
+                <CardTitle>Invest Your Money</CardTitle>
+                <CardDescription>Grow your wealth with a projected 20% annual return.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                <Label htmlFor="investment-amount">Amount to Invest (BWP)</Label>
+                <Input
+                    id="investment-amount"
+                    type="number"
+                    placeholder="e.g., 500"
+                    value={investmentAmount}
+                    onChange={(e) => setInvestmentAmount(e.target.value)}
+                />
+                </div>
+                 <p className="text-sm text-muted-foreground">
+                    Based on a total 25% interest rate. You keep 20%, WealthWise receives 5%.
+                </p>
+            </CardContent>
+            <CardFooter>
+                <Button onClick={handleInvest} disabled={!investmentAmount}>Invest Now</Button>
+            </CardFooter>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>1-Year Projection</CardTitle>
+                    <CardDescription>Based on your current total investment.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ResponsiveContainer width="100%" height={200}>
+                        <LineChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis tickFormatter={(value) => formatCurrency(value, {notation: 'compact'})} />
+                        <Tooltip content={({ active, payload }) => {
+                             if (active && payload && payload.length) {
+                                return (
+                                    <div className="rounded-lg border bg-background p-2 shadow-sm">
+                                        <p className="font-bold">{`${payload[0].name}: ${formatCurrency(payload[0].value as number)}`}</p>
+                                    </div>
+                                )
+                                }
+                                return null
+                        }} />
+                        <Line type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2} dot={{r: 5, fill: "hsl(var(--primary))"}} activeDot={{ r: 8 }}/>
+                        </LineChart>
+                    </ResponsiveContainer>
+                </CardContent>
+            </Card>
+        </div>
+        <Card className="md:col-span-2">
+          <CardHeader>
+            <CardTitle>Your Investment Portfolio</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Investment</TableHead>
+                  <TableHead>Start Date</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {investments.map((inv) => (
+                  <TableRow key={inv.id}>
+                    <TableCell className="font-medium">{inv.name}</TableCell>
+                    <TableCell>{new Date(inv.startDate).toLocaleDateString()}</TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(inv.amount)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFoot>
+                <TableRow className="text-base font-bold">
+                  <TableCell colSpan={2}>Total Invested</TableCell>
+                  <TableCell className="text-right">{formatCurrency(totalInvested)}</TableCell>
+                </TableRow>
+                 <TableRow>
+                  <TableCell colSpan={2} className="text-muted-foreground">Projected Annual Return (20%)</TableCell>
+                  <TableCell className="text-right text-green-600">{formatCurrency(annualReturn)}</TableCell>
+                </TableRow>
+                <TableRow className="text-lg font-bold">
+                  <TableCell colSpan={2}>Projected Value (1 Year)</TableCell>
+                  <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
+                </TableRow>
+              </TableFoot>
+            </Table>
+          </CardContent>
+        </Card>
+      </main>
+    </div>
+  );
+}

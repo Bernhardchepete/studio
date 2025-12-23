@@ -49,7 +49,8 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
   useEffect(() => {
     // Automatically generate plan when the component mounts
     handleGeneratePlan();
-  }, [data]); // Re-run when user data changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]); 
 
   return (
     <Card className="flex flex-col">
@@ -63,7 +64,7 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
             </div>
              <Badge variant="outline">{formatDistanceToNow(deadlineDate, { addSuffix: true })}</Badge>
         </div>
-      </Header>
+      </CardHeader>
       <CardContent className="flex-1 space-y-6">
         <div className="space-y-2">
           <div className="flex justify-between text-sm font-medium">

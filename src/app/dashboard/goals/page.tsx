@@ -14,15 +14,17 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { formatCurrency } from "@/lib/utils";
 import type { Goal } from '@/lib/types';
-import { PlusCircle, Target, Bot, Loader2, Gauge } from 'lucide-react';
+import { PlusCircle, Target, Bot, Loader2, Gauge, RefreshCw } from 'lucide-react';
 import { generateGoalPlan } from '@/ai/flows/generate-goal-plan';
 import { Badge } from '@/components/ui/badge';
 import { differenceInMonths, formatDistanceToNow } from 'date-fns';
 import { useDemoUser } from '@/contexts/demo-user-context';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const GoalCard = ({ goal }: { goal: Goal }) => {
   const [isPending, startTransition] = useTransition();
   const [plan, setPlan] = useState<{ plan: string, probability: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { data } = useDemoUser();
 
   const progress = (goal.saved / goal.target) * 100;
@@ -34,15 +36,21 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
     if (!data) return;
     const totalIncome = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
 
+    setError(null);
     startTransition(async () => {
-      const result = await generateGoalPlan({
-        goalName: goal.name,
-        goalAmount: goal.target,
-        currentSavings: goal.saved,
-        deadline: goal.deadline,
-        monthlyIncome: totalIncome
-      });
-      setPlan(result);
+      try {
+        const result = await generateGoalPlan({
+          goalName: goal.name,
+          goalAmount: goal.target,
+          currentSavings: goal.saved,
+          deadline: goal.deadline,
+          monthlyIncome: totalIncome
+        });
+        setPlan(result);
+      } catch (e) {
+        console.error(e);
+        setError("The AI model is currently busy. Please try again in a moment.");
+      }
     });
   };
 
@@ -85,29 +93,40 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
             </div>
         </div>
 
-        {plan && !isPending && (
-            <div className="space-y-4">
-                 <div className="flex items-center gap-2">
-                    <Gauge className="text-primary"/>
-                    <h3 className="font-semibold">AI Probability &amp; Plan</h3>
-                </div>
-                 <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
+        <div className="space-y-4">
+            <div className="flex items-center gap-2">
+                <Gauge className="text-primary"/>
+                <h3 className="font-semibold">AI Probability &amp; Plan</h3>
+            </div>
+            {plan && !isPending && !error && (
+                <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
                     <div className="text-center">
                         <p className="text-2xl font-bold text-primary">{Math.round(plan.probability * 100)}%</p>
                         <p className="text-xs text-muted-foreground">Success Rate</p>
                     </div>
                     <p className="text-sm text-foreground/80 border-l pl-4">{plan.plan}</p>
-                 </div>
-            </div>
-        )}
-
-        {isPending && (
-             <div className="space-y-2">
-                 <div className="h-4 bg-muted-foreground/10 rounded-md animate-pulse w-1/3" />
-                 <div className="h-8 bg-muted-foreground/10 rounded-md animate-pulse" />
-            </div>
-        )}
-
+                </div>
+            )}
+            {isPending && (
+                <div className="space-y-2 p-3 rounded-lg bg-muted/50">
+                    <div className="h-4 bg-muted-foreground/10 rounded-md animate-pulse w-1/3" />
+                    <div className="h-8 bg-muted-foreground/10 rounded-md animate-pulse" />
+                </div>
+            )}
+            {error && !isPending && (
+                <Alert variant="destructive">
+                    <Bot className="h-4 w-4" />
+                    <AlertTitle>AI Plan Failed</AlertTitle>
+                    <AlertDescription className="flex items-center justify-between">
+                        {error}
+                        <Button variant="destructive" size="sm" onClick={handleGeneratePlan}>
+                            <RefreshCw className="mr-2 h-4 w-4" />
+                            Try Again
+                        </Button>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </div>
       </CardContent>
       <CardFooter>
           <Button variant="outline" size="sm">

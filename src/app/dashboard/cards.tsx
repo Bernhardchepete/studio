@@ -25,50 +25,52 @@ import {
   Legend,
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
-import { transactions, investments, goals, sixMonthPerformance } from "@/lib/data";
 import { useState, useTransition } from "react";
 import { generateFinancialSummary } from '@/ai/flows/generate-financial-summary';
 import { Button } from "@/components/ui/button";
-
-const totalIncome = transactions
-  .filter((t) => t.type === "income")
-  .reduce((sum, t) => sum + t.amount, 0);
-const totalExpenses = transactions
-  .filter((t) => t.type === "expense")
-  .reduce((sum, t) => sum + t.amount, 0);
-const totalInvested = investments.reduce((sum, inv) => sum + inv.amount, 0);
-const totalGoalSavings = goals.reduce((sum, goal) => sum + goal.saved, 0);
-
-
-const overviewData = [
-  {
-    title: "Monthly Income",
-    value: totalIncome,
-    icon: DollarSign,
-    change: "+12% from last month",
-  },
-  {
-    title: "Monthly Expenses",
-    value: totalExpenses,
-    icon: Wallet,
-    change: "-5% from last month",
-  },
-  {
-    title: "Total Invested",
-    value: totalInvested,
-    icon: TrendingUp,
-    change: "20% avg. return",
-  },
-  {
-    title: "Goal Savings",
-    value: totalGoalSavings,
-    icon: Target,
-    change: "On track for Cape Town!",
-  },
-];
-
+import { useDemoUser } from "@/contexts/demo-user-context";
 
 export function OverviewCards() {
+  const { user, data } = useDemoUser();
+
+  if (!user || !data) return null;
+
+  const totalIncome = data.transactions
+    .filter((t) => t.type === "income")
+    .reduce((sum, t) => sum + t.amount, 0);
+  const totalExpenses = data.transactions
+    .filter((t) => t.type === "expense")
+    .reduce((sum, t) => sum + t.amount, 0);
+  const totalInvested = data.investments.reduce((sum, inv) => sum + inv.amount, 0);
+  const totalGoalSavings = data.goals.reduce((sum, goal) => sum + goal.saved, 0);
+
+  const overviewData = [
+    {
+      title: "Monthly Income",
+      value: totalIncome,
+      icon: DollarSign,
+      change: "+12% from last month",
+    },
+    {
+      title: "Monthly Expenses",
+      value: totalExpenses,
+      icon: Wallet,
+      change: "-5% from last month",
+    },
+    {
+      title: "Total Invested",
+      value: totalInvested,
+      icon: TrendingUp,
+      change: "20% avg. return",
+    },
+    {
+      title: "Goal Savings",
+      value: totalGoalSavings,
+      icon: Target,
+      change: "On track for your goals!",
+    },
+  ];
+
   return (
     <>
       {overviewData.map((item, index) => (
@@ -90,6 +92,9 @@ export function OverviewCards() {
 }
 
 export function PerformanceChartCard() {
+    const { data } = useDemoUser();
+    if (!data) return null;
+
     return (
         <Card>
             <CardHeader>
@@ -98,7 +103,7 @@ export function PerformanceChartCard() {
             </CardHeader>
             <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={sixMonthPerformance}>
+                    <LineChart data={data.sixMonthPerformance}>
                         <XAxis
                             dataKey="month"
                             stroke="hsl(var(--muted-foreground))"
@@ -170,12 +175,17 @@ export function PerformanceChartCard() {
 export function AIInsightsCard() {
   const [isPending, startTransition] = useTransition();
   const [summary, setSummary] = useState('');
+  const { data } = useDemoUser();
 
   const handleGenerateSummary = () => {
+    if (!data) return;
+    
     startTransition(async () => {
-      const incomeString = transactions.filter(t => t.type === 'income').map(t => `${t.description}: ${formatCurrency(t.amount)}`).join(', ');
-      const expensesString = transactions.filter(t => t.type === 'expense').map(t => `${t.category} - ${t.description}: ${formatCurrency(t.amount)}`).join(', ');
-      
+      const incomeString = data.transactions.filter(t => t.type === 'income').map(t => `${t.description}: ${formatCurrency(t.amount)}`).join(', ');
+      const expensesString = data.transactions.filter(t => t.type === 'expense').map(t => `${t.category} - ${t.description}: ${formatCurrency(t.amount)}`).join(', ');
+      const totalInvested = data.investments.reduce((sum, inv) => sum + inv.amount, 0);
+      const totalGoalSavings = data.goals.reduce((sum, goal) => sum + goal.saved, 0);
+
       const result = await generateFinancialSummary({
         assets: `Total Investments: ${formatCurrency(totalInvested)}, Goal Savings: ${formatCurrency(totalGoalSavings)}`,
         liabilities: 'No liabilities',

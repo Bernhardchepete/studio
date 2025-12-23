@@ -1,3 +1,5 @@
+'use client';
+
 import { DashboardHeader } from "@/components/dashboard-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,8 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { useDemoUser } from "@/contexts/demo-user-context";
 
 export default function SettingsPage() {
+  const { user } = useDemoUser();
+
   return (
     <div className="flex flex-1 flex-col">
       <DashboardHeader title="Settings" />
@@ -29,16 +34,16 @@ export default function SettingsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" defaultValue="Demo" />
+                  <Input id="firstName" defaultValue={user?.name.split(' ')[0]} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" defaultValue="User" />
+                  <Input id="lastName" defaultValue={user?.name.split(' ')[1]} />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" defaultValue="demo@wealthwise.app" />
+                <Input id="email" type="email" defaultValue={user?.email} />
               </div>
               <Button>Save Changes</Button>
             </CardContent>
@@ -66,7 +71,7 @@ export default function SettingsPage() {
                     <p className="text-sm text-muted-foreground">Set your preferred currency.</p>
                 </div>
                 {/* This would be a Select component in a real app */}
-                <Input defaultValue="USD" className="w-24" />
+                <Input defaultValue="BWP" className="w-24" />
               </div>
             </CardContent>
           </Card>

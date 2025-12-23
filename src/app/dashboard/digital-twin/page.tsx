@@ -12,21 +12,23 @@ import {
 } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Bot, Loader2 } from 'lucide-react';
-import { transactions } from '@/lib/data';
 import { simulateFinancialScenario } from '@/ai/flows/financial-scenario-simulator';
+import { useDemoUser } from '@/contexts/demo-user-context';
 
 export default function DigitalTwinPage() {
   const [scenario, setScenario] = useState('');
   const [isPending, startTransition] = useTransition();
   const [prediction, setPrediction] = useState('');
-
-  const currentFinancials = JSON.stringify({
-    transactions,
-    financialGoals: "Saving for a trip to Cape Town at the end of the year.",
-  }, null, 2);
+  const { data } = useDemoUser();
 
   const handleSimulate = () => {
-    if (!scenario) return;
+    if (!scenario || !data) return;
+
+    const currentFinancials = JSON.stringify({
+      transactions: data.transactions,
+      financialGoals: data.goals.map(g => g.description).join(', '),
+    }, null, 2);
+
 
     startTransition(async () => {
       const result = await simulateFinancialScenario({

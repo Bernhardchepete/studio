@@ -21,7 +21,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, ArrowDownLeft, PlusCircle, MoreHorizontal, ShoppingCart, Bus } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
-import { transactions as initialTransactions } from "@/lib/data";
 import type { Transaction } from '@/lib/types';
 import {
   DropdownMenu,
@@ -42,6 +41,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useDemoUser } from '@/contexts/demo-user-context';
 
 
 const TransactionDetailsDialog = ({ transaction }: { transaction: Transaction }) => {
@@ -89,10 +89,17 @@ const TransactionDetailsDialog = ({ transaction }: { transaction: Transaction })
   };
 
 export default function TransactionsPage() {
-  const [transactions, setTransactions] = React.useState<Transaction[]>(initialTransactions);
+  const { data } = useDemoUser();
+  const [transactions, setTransactions] = React.useState<Transaction[]>([]);
   const [isSendDialogOpen, setSendDialogOpen] = React.useState(false);
   const [isDetailsDialogOpen, setDetailsDialogOpen] = React.useState(false);
   const [selectedTransaction, setSelectedTransaction] = React.useState<Transaction | null>(null);
+
+  React.useEffect(() => {
+    if (data) {
+        setTransactions(data.transactions);
+    }
+  }, [data]);
 
   const handleSendMoney = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -117,6 +124,8 @@ export default function TransactionsPage() {
     setSelectedTransaction(transaction);
     setDetailsDialogOpen(true);
   };
+
+  if (!data) return null;
 
 
   return (

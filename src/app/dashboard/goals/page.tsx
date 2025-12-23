@@ -13,24 +13,27 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { formatCurrency } from "@/lib/utils";
-import { goals, transactions } from "@/lib/data";
 import type { Goal } from '@/lib/types';
 import { PlusCircle, Target, Bot, Loader2, Gauge } from 'lucide-react';
 import { generateGoalPlan } from '@/ai/flows/generate-goal-plan';
 import { Badge } from '@/components/ui/badge';
 import { differenceInMonths, formatDistanceToNow } from 'date-fns';
+import { useDemoUser } from '@/contexts/demo-user-context';
 
 const GoalCard = ({ goal }: { goal: Goal }) => {
   const [isPending, startTransition] = useTransition();
   const [plan, setPlan] = useState<{ plan: string, probability: number } | null>(null);
+  const { data } = useDemoUser();
 
   const progress = (goal.saved / goal.target) * 100;
   const deadlineDate = new Date(goal.deadline);
   const monthsRemaining = differenceInMonths(deadlineDate, new Date());
   const monthlyContribution = (goal.target - goal.saved) / (monthsRemaining > 0 ? monthsRemaining : 1);
-  const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-
+  
   const handleGeneratePlan = () => {
+    if (!data) return;
+    const totalIncome = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+
     startTransition(async () => {
       const result = await generateGoalPlan({
         goalName: goal.name,
@@ -46,7 +49,7 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
   useEffect(() => {
     // Automatically generate plan when the component mounts
     handleGeneratePlan();
-  }, []);
+  }, [data]); // Re-run when user data changes
 
   return (
     <Card className="flex flex-col">
@@ -60,7 +63,7 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
             </div>
              <Badge variant="outline">{formatDistanceToNow(deadlineDate, { addSuffix: true })}</Badge>
         </div>
-      </CardHeader>
+      </Header>
       <CardContent className="flex-1 space-y-6">
         <div className="space-y-2">
           <div className="flex justify-between text-sm font-medium">
@@ -116,6 +119,9 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
 
 
 export default function GoalsPage() {
+    const { data } = useDemoUser();
+    if (!data) return null;
+
   return (
     <div className="flex flex-1 flex-col">
       <DashboardHeader title="Financial Goals" />
@@ -127,7 +133,7 @@ export default function GoalsPage() {
             </Button>
         </div>
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-          {goals.map((goal) => (
+          {data.goals.map((goal) => (
             <GoalCard key={goal.id} goal={goal} />
           ))}
         </div>

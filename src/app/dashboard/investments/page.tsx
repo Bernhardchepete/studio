@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DashboardHeader } from "@/components/dashboard-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,16 +24,23 @@ import {
   TableFooter as TableFoot,
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
-import { investments as initialInvestments } from "@/lib/data";
 import type { Investment } from '@/lib/types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useDemoUser } from '@/contexts/demo-user-context';
 
 const ANNUAL_USER_RATE = 0.20; // 20%
 const MONTHLY_USER_RATE = ANNUAL_USER_RATE / 12;
 
 export default function InvestmentsPage() {
-  const [investments, setInvestments] = useState<Investment[]>(initialInvestments);
+  const { data } = useDemoUser();
+  const [investments, setInvestments] = useState<Investment[]>([]);
   const [investmentAmount, setInvestmentAmount] = useState('');
+
+  useEffect(() => {
+    if (data) {
+      setInvestments(data.investments);
+    }
+  }, [data]);
 
   const totalInvested = investments.reduce((sum, inv) => sum + inv.amount, 0);
   
@@ -60,6 +67,8 @@ export default function InvestmentsPage() {
 
   const projectedValue12Months = totalInvested * Math.pow(1 + MONTHLY_USER_RATE, 12);
   const monthlyReturn = totalInvested * MONTHLY_USER_RATE;
+  
+  if (!data) return null;
 
   return (
     <div className="flex flex-1 flex-col">

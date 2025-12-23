@@ -11,26 +11,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Link from "next/link";
-
-const userAvatar = PlaceHolderImages.find(p => p.id === 'user-avatar');
+import { useDemoUser } from "@/contexts/demo-user-context";
 
 export function UserNav() {
+  const { user, logout } = useDemoUser();
+
+  if (!user) return null;
+
+  const userAvatar = PlaceHolderImages.find(p => p.id === user.avatarId);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
-            {userAvatar && <AvatarImage src={userAvatar.imageUrl} alt="User avatar" data-ai-hint={userAvatar.imageHint} />}
-            <AvatarFallback>WW</AvatarFallback>
+            {userAvatar && <AvatarImage src={userAvatar.imageUrl} alt={user.name} data-ai-hint={userAvatar.imageHint} />}
+            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Demo User</p>
+            <p className="text-sm font-medium leading-none">{user.name}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              demo@wealthwise.app
+              {user.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -42,7 +47,7 @@ export function UserNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-            <Link href="/">Log out</Link>
+            <Link href="/" onClick={() => logout()}>Log out</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DashboardHeader } from "@/components/dashboard-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,11 +24,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Progress } from "@/components/ui/progress";
-import { budgets as initialBudgets } from "@/lib/data";
 import type { Budget } from '@/lib/types';
 import { formatCurrency, cn } from "@/lib/utils";
 import { PlusCircle, MoreVertical, Zap, CircleDot, ShieldCheck, User, CheckCircle } from "lucide-react";
 import { Badge } from '@/components/ui/badge';
+import { useDemoUser } from '@/contexts/demo-user-context';
 
 const priorityConfig = {
     High: {
@@ -52,7 +52,14 @@ const priorityConfig = {
   };
 
 export default function BudgetsPage() {
-  const [budgets, setBudgets] = useState<Budget[]>(initialBudgets);
+  const { data } = useDemoUser();
+  const [budgets, setBudgets] = useState<Budget[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setBudgets(data.budgets);
+    }
+  }, [data]);
 
   const handlePaymentMethodChange = (budgetId: string, method: Budget['paymentMethod']) => {
     setBudgets(currentBudgets => 
@@ -61,6 +68,8 @@ export default function BudgetsPage() {
       )
     );
   };
+  
+  if (!data) return null;
 
   return (
     <div className="flex flex-1 flex-col">
@@ -90,7 +99,7 @@ export default function BudgetsPage() {
                             </CardDescription>
                         </div>
                         <Badge variant={budget.priority === 'High' ? 'destructive' : budget.priority === 'Medium' ? 'secondary' : 'default'}
-                            className={cn("capitalize", budget.priority === 'default' && "bg-green-600 hover:bg-green-700 text-white")}
+                            className={cn("capitalize", budget.priority === 'Low' && "bg-green-600 hover:bg-green-700 text-white")}
                         >
                             {budget.priority}
                         </Badge>

@@ -32,7 +32,6 @@ import {
     Landmark
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
-import { receipts as initialReceipts } from "@/lib/data";
 import type { Receipt as ReceiptType } from '@/lib/types';
 import {
   Dialog,
@@ -44,6 +43,7 @@ import {
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
+import { useDemoUser } from '@/contexts/demo-user-context';
 
 const InsightWidget = ({ title, value, icon: Icon }: { title: string; value: string; icon: React.ElementType }) => (
     <Card>
@@ -129,7 +129,17 @@ const CameraScanner = () => {
   
 
 export default function ReceiptsPage() {
-    const [receipts, setReceipts] = React.useState<ReceiptType[]>(initialReceipts);
+    const { data } = useDemoUser();
+    const [receipts, setReceipts] = React.useState<ReceiptType[]>([]);
+
+    React.useEffect(() => {
+        if (data) {
+            setReceipts(data.receipts);
+        }
+    }, [data]);
+    
+    if (!data) return null;
+
     const totalSpend = receipts.reduce((sum, r) => sum + r.total, 0);
 
   return (

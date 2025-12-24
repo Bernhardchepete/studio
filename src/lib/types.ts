@@ -36,6 +36,7 @@ export type Goal = {
   saved: number;
   deadline: string;
   description: string;
+  imageId: string;
 };
 
 export type Receipt = {

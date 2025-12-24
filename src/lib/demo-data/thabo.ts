@@ -51,7 +51,8 @@ const goals = [
     description: 'A 5-day trip to explore the Mother City for my birthday.',
     target: 7000,
     saved: 2500,
-    deadline: '2024-12-15'
+    deadline: '2024-12-15',
+    imageId: 'goal-cape-town',
   }
 ];
 

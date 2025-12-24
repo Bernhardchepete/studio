@@ -39,7 +39,8 @@ const goals = [
         description: 'Build a 3-month living expense safety net.',
         target: 18000,
         saved: 6000,
-        deadline: '2025-01-01'
+        deadline: '2025-01-01',
+        imageId: 'goal-emergency-fund'
     },
     {
         id: '2',
@@ -47,7 +48,8 @@ const goals = [
         description: 'Upgrade to a new MacBook Pro for work.',
         target: 25000,
         saved: 5000,
-        deadline: '2024-12-01'
+        deadline: '2024-12-01',
+        imageId: 'goal-new-laptop'
     }
 ];
 

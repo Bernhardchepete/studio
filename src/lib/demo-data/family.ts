@@ -30,7 +30,8 @@ const goals = [
     description: 'Saving for the big family get-together in December.',
     target: 15000,
     saved: 9500,
-    deadline: '2024-12-01'
+    deadline: '2024-12-01',
+    imageId: 'goal-family-reunion'
   }
 ];
 

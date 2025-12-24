@@ -29,6 +29,48 @@
       "description": "User avatar for the Family account",
       "imageUrl": "https://images.unsplash.com/photo-1555981347-1691a56a3e46?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzODkyODd8MHwxfGFsbHx8fHx8fHx8fDE2NjU2MDY4OTM&ixlib=rb-4.0.3&q=80&w=1080",
       "imageHint": "happy family"
+    },
+    {
+      "id": "goal-cape-town",
+      "description": "Image for the Cape Town trip goal",
+      "imageUrl": "https://images.unsplash.com/photo-1576487248805-cf40f3c55435?q=80&w=2072&auto=format&fit=crop",
+      "imageHint": "cape town"
+    },
+    {
+      "id": "goal-buy-car",
+      "description": "Image for buying a car goal",
+      "imageUrl": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "new car"
+    },
+    {
+      "id": "goal-cash-flow",
+      "description": "Image for stabilizing cash flow",
+      "imageUrl": "https://images.unsplash.com/photo-1642790324806-b349f4f4b85c?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "financial chart"
+    },
+    {
+      "id": "goal-working-capital",
+      "description": "Image for accessing working capital",
+      "imageUrl": "https://images.unsplash.com/photo-1664574653790-3826b0ba65f5?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "business growth"
+    },
+    {
+      "id": "goal-emergency-fund",
+      "description": "Image for building an emergency fund",
+      "imageUrl": "https://images.unsplash.com/photo-1560520031-3a4dc186a973?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "savings jar"
+    },
+    {
+      "id": "goal-new-laptop",
+      "description": "Image for buying a new laptop",
+      "imageUrl": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "new laptop"
+    },
+    {
+      "id": "goal-family-reunion",
+      "description": "Image for a family reunion",
+      "imageUrl": "https://images.unsplash.com/photo-1537230499-314059013233?q=80&w=2070&auto=format&fit=crop",
+      "imageHint": "family celebration"
     }
   ]
 }

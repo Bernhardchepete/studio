@@ -36,7 +36,8 @@ const goals = [
     description: 'Maintain a minimum of P15,000 positive cash flow for 3 consecutive months.',
     target: 15000,
     saved: 6500, // Current month's net
-    deadline: '2024-10-01'
+    deadline: '2024-10-01',
+    imageId: 'goal-cash-flow'
   },
   {
     id: '2',
@@ -44,7 +45,8 @@ const goals = [
     description: 'Become eligible for a P20,000 short-term loan for business expansion.',
     target: 20000,
     saved: 0,
-    deadline: '2024-09-01'
+    deadline: '2024-09-01',
+    imageId: 'goal-working-capital'
   }
 ];
 

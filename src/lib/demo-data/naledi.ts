@@ -41,7 +41,8 @@ const goals = [
     description: 'Saving for a down payment on a reliable new car.',
     target: 50000,
     saved: 15000,
-    deadline: '2025-07-01'
+    deadline: '2025-07-01',
+    imageId: 'goal-buy-car'
   }
 ];
 

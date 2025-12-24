@@ -20,6 +20,8 @@ import { Badge } from '@/components/ui/badge';
 import { differenceInMonths, formatDistanceToNow } from 'date-fns';
 import { useDemoUser } from '@/contexts/demo-user-context';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const GoalCard = ({ goal }: { goal: Goal }) => {
   const [isPending, startTransition] = useTransition();
@@ -32,6 +34,8 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
   const monthsRemaining = differenceInMonths(deadlineDate, new Date());
   const monthlyContribution = (goal.target - goal.saved) / (monthsRemaining > 0 ? monthsRemaining : 1);
   
+  const goalImage = PlaceHolderImages.find(p => p.id === goal.imageId);
+
   const handleGeneratePlan = () => {
     if (!data) return;
     const totalIncome = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
@@ -61,7 +65,18 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
   }, [data]); 
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col overflow-hidden">
+      {goalImage && (
+        <div className="relative w-full h-48">
+            <Image 
+                src={goalImage.imageUrl}
+                alt={goal.name}
+                fill
+                className="object-cover"
+                data-ai-hint={goalImage.imageHint}
+            />
+        </div>
+      )}
       <CardHeader>
         <div className="flex items-start justify-between">
             <div>

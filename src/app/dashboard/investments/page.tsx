@@ -28,8 +28,7 @@ import type { Investment } from '@/lib/types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useDemoUser } from '@/contexts/demo-user-context';
 
-const ANNUAL_USER_RATE = 0.20; // 20%
-const MONTHLY_USER_RATE = ANNUAL_USER_RATE / 12;
+const MONTHLY_INTEREST_RATE = 0.25; // 25%
 
 export default function InvestmentsPage() {
   const { data } = useDemoUser();
@@ -61,12 +60,12 @@ export default function InvestmentsPage() {
 
   const chartData = Array.from({ length: 13 }, (_, i) => {
     const monthName = new Date(2024, i, 1).toLocaleString('default', { month: 'short' });
-    const value = totalInvested * Math.pow(1 + MONTHLY_USER_RATE, i);
+    const value = totalInvested * Math.pow(1 + MONTHLY_INTEREST_RATE, i);
     return { name: i === 0 ? 'Start' : monthName, value };
   });
 
-  const projectedValue12Months = totalInvested * Math.pow(1 + MONTHLY_USER_RATE, 12);
-  const monthlyReturn = totalInvested * MONTHLY_USER_RATE;
+  const projectedValue12Months = totalInvested * Math.pow(1 + MONTHLY_INTEREST_RATE, 12);
+  const monthlyReturn = totalInvested * MONTHLY_INTEREST_RATE;
   
   if (!data) return null;
 
@@ -78,7 +77,7 @@ export default function InvestmentsPage() {
             <Card>
             <CardHeader>
                 <CardTitle>Invest Your Money</CardTitle>
-                <CardDescription>Grow your wealth with a projected 20% annual return, calculated monthly.</CardDescription>
+                <CardDescription>Grow your wealth with a projected 25% monthly return.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -92,7 +91,7 @@ export default function InvestmentsPage() {
                 />
                 </div>
                  <p className="text-sm text-muted-foreground">
-                    Based on a total 25% annual interest rate. You keep 20%, WealthWise receives 5%. Returns are compounded monthly.
+                    Based on a 25% monthly interest rate. Returns are compounded monthly.
                 </p>
             </CardContent>
             <CardFooter>
@@ -102,7 +101,7 @@ export default function InvestmentsPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>12-Month Projection</CardTitle>
-                    <CardDescription>Based on your current total investment and monthly compounding.</CardDescription>
+                    <CardDescription>Based on your current total investment and monthly compounding at 25%.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ResponsiveContainer width="100%" height={200}>
@@ -156,7 +155,7 @@ export default function InvestmentsPage() {
                   <TableCell className="text-right">{formatCurrency(totalInvested)}</TableCell>
                 </TableRow>
                  <TableRow>
-                  <TableCell colSpan={2} className="text-muted-foreground">Projected Monthly Return</TableCell>
+                  <TableCell colSpan={2} className="text-muted-foreground">Projected Monthly Return (25%)</TableCell>
                   <TableCell className="text-right text-green-600">{formatCurrency(monthlyReturn)}</TableCell>
                 </TableRow>
                 <TableRow className="text-lg font-bold">

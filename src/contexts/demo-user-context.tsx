@@ -9,6 +9,7 @@ interface DemoUserContextType {
   data: DemoData | null;
   login: (userId: string) => void;
   logout: () => void;
+  updateData: (newData: Partial<DemoData>) => void;
 }
 
 const DemoUserContext = createContext<DemoUserContextType | undefined>(undefined);
@@ -28,7 +29,8 @@ export const DemoUserProvider = ({ children }: { children: ReactNode }) => {
         const foundUser = demoUsers.find(u => u.id === storedUserId) || null;
         setUser(foundUser);
         if (foundUser) {
-            setData(demoData[foundUser.id as keyof typeof demoData]);
+            // Make a deep copy to avoid modifying the original demoData object
+            setData(JSON.parse(JSON.stringify(demoData[foundUser.id as keyof typeof demoData])));
         }
       } else if (pathname.startsWith('/dashboard')) {
         // If no user is logged in and they try to access dashboard, redirect to login
@@ -43,7 +45,8 @@ export const DemoUserProvider = ({ children }: { children: ReactNode }) => {
     const foundUser = demoUsers.find(u => u.id === userId);
     if (foundUser) {
       setUser(foundUser);
-      setData(demoData[foundUser.id as keyof typeof demoData]);
+      // Make a deep copy to avoid modifying the original demoData object
+      setData(JSON.parse(JSON.stringify(demoData[foundUser.id as keyof typeof demoData])));
       try {
         localStorage.setItem(USER_STORAGE_KEY, userId);
       } catch (error) {
@@ -63,8 +66,15 @@ export const DemoUserProvider = ({ children }: { children: ReactNode }) => {
     router.push('/');
   };
 
+  const updateData = (newData: Partial<DemoData>) => {
+    setData(prevData => {
+        if (!prevData) return null;
+        return { ...prevData, ...newData };
+    });
+  }
+
   return (
-    <DemoUserContext.Provider value={{ user, data, login, logout }}>
+    <DemoUserContext.Provider value={{ user, data, login, logout, updateData }}>
       {children}
     </DemoUserContext.Provider>
   );

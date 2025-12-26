@@ -24,14 +24,14 @@ import {
   TableFooter as TableFoot,
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
-import type { Investment } from '@/lib/types';
+import type { Investment, Transaction } from '@/lib/types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useDemoUser } from '@/contexts/demo-user-context';
 
 const MONTHLY_INTEREST_RATE = 0.25; // 25%
 
 export default function InvestmentsPage() {
-  const { data } = useDemoUser();
+  const { data, updateData } = useDemoUser();
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [investmentAmount, setInvestmentAmount] = useState('');
 
@@ -45,16 +45,28 @@ export default function InvestmentsPage() {
   
   const handleInvest = () => {
     const amount = parseFloat(investmentAmount);
-    if (!amount || amount <= 0) return;
+    if (!amount || amount <= 0 || !data) return;
 
-    // This is a simulation. In a real app, you'd check user's balance
     const newInvestment: Investment = {
       id: (investments.length + 1).toString(),
       name: `WealthWise Growth Fund`,
       amount,
       startDate: new Date().toISOString(),
     };
-    setInvestments([...investments, newInvestment]);
+
+    const newTransaction: Transaction = {
+        id: (data.transactions.length + 1).toString(),
+        date: new Date().toISOString(),
+        description: 'New Investment',
+        category: 'Investment',
+        amount: amount,
+        type: 'expense'
+    };
+    
+    const newInvestments = [...investments, newInvestment];
+    const newTransactions = [newTransaction, ...data.transactions];
+
+    updateData({ investments: newInvestments, transactions: newTransactions });
     setInvestmentAmount('');
   };
 

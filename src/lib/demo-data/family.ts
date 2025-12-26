@@ -46,11 +46,21 @@ const sixMonthPerformance = [
 
 const receipts: any[] = [];
 
+const lending = {
+    eligibility: {
+        eligible: false,
+        maxLoanAmount: 0,
+        interestRate: 0,
+        explanation: "Individual accounts are required for loan applications. This is a shared account."
+    }
+};
+
 export const demoData: DemoData = {
     transactions,
     budgets,
     investments,
     goals,
     sixMonthPerformance,
-    receipts
+    receipts,
+    lending,
 }

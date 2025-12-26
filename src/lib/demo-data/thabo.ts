@@ -95,11 +95,21 @@ const receipts = [
       },
   ];
 
+const lending = {
+    eligibility: {
+        eligible: false,
+        maxLoanAmount: 0,
+        interestRate: 0,
+        explanation: "Low and inconsistent income. Focus on building a more stable income source before applying for loans."
+    }
+};
+
 export const demoData: DemoData = {
     transactions,
     budgets,
     investments,
     goals,
     sixMonthPerformance,
-    receipts
+    receipts,
+    lending
 }

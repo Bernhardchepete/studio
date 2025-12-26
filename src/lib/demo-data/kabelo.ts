@@ -77,11 +77,21 @@ const receipts = [
     },
 ];
 
+const lending = {
+    eligibility: {
+        eligible: true,
+        maxLoanAmount: 20000,
+        interestRate: 12.5,
+        explanation: "Consistent client payments and positive net cash flow over the last 3 months indicate good financial health."
+    }
+};
+
 export const demoData: DemoData = {
     transactions,
     budgets,
     investments,
     goals,
     sixMonthPerformance,
-    receipts
+    receipts,
+    lending,
 }

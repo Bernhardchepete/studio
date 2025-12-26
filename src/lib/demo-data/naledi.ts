@@ -71,11 +71,21 @@ const receipts = [
     },
 ];
 
+const lending = {
+    eligibility: {
+        eligible: true,
+        maxLoanAmount: 40000,
+        interestRate: 9.5,
+        explanation: "Excellent and stable income-to-expense ratio. Strong candidate for a vehicle loan."
+    }
+};
+
 export const demoData: DemoData = {
     transactions,
     budgets,
     investments,
     goals,
     sixMonthPerformance,
-    receipts
+    receipts,
+    lending,
 }

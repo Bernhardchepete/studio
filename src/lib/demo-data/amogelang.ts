@@ -64,11 +64,21 @@ const sixMonthPerformance = [
 
 const receipts: any[] = [];
 
+const lending = {
+    eligibility: {
+        eligible: false,
+        maxLoanAmount: 0,
+        interestRate: 0,
+        explanation: "Income is too variable for a standard loan. Build a more consistent income history to become eligible."
+    }
+};
+
 export const demoData: DemoData = {
     transactions,
     budgets,
     investments,
     goals,
     sixMonthPerformance,
-    receipts
+    receipts,
+    lending,
 }

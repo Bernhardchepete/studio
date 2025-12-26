@@ -15,7 +15,7 @@ export type Transaction = {
 
 export type Budget = {
   id: string;
-  category: 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Cape Town Trip';
+  category: 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Cape Town Trip' | 'Family Reunion' | 'Emergency Fund' | 'Device Upgrade';
   allocated: number;
   spent: number;
   priority: 'High' | 'Medium' | 'Low';
@@ -49,4 +49,13 @@ export type Receipt = {
     total: number;
     category: 'Food' | 'Transport' | 'Utilities' | 'Other';
     paymentMethod: string;
+};
+
+export type Lending = {
+    eligibility: {
+        eligible: boolean;
+        maxLoanAmount: number;
+        interestRate: number;
+        explanation: string;
+    } | null;
 };

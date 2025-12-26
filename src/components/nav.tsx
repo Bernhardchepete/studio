@@ -13,7 +13,8 @@ import {
   BrainCircuit,
   TrendingUp,
   Target,
-  Receipt
+  Receipt,
+  Landmark
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
@@ -25,6 +26,7 @@ const menuItems = [
   { href: '/dashboard/goals', label: 'Goals', icon: Target },
   { href: '/dashboard/investments', label: 'Investments', icon: TrendingUp },
   { href: '/dashboard/receipts', label: 'Receipts', icon: Receipt },
+  { href: '/dashboard/lending', label: 'Lending', icon: Landmark },
   { href: '/dashboard/digital-twin', label: 'Digital Twin', icon: BrainCircuit },
   { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];

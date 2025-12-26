@@ -1,4 +1,4 @@
-import type { Transaction, Budget, Investment, Goal, Receipt } from '../types';
+import type { Transaction, Budget, Investment, Goal, Receipt, Lending } from '../types';
 
 import { demoData as thaboData, user as thaboUser } from './thabo';
 import { demoData as nalediData, user as nalediUser } from './naledi';
@@ -22,6 +22,7 @@ export interface DemoData {
   goals: Goal[];
   sixMonthPerformance: { month: string; income: number; expenses: number; net: number }[];
   receipts: Receipt[];
+  lending: Lending;
 }
 
 export const demoUsers: DemoUser[] = [

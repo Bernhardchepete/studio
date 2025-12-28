@@ -117,7 +117,7 @@ export default function LendingPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><Banknote /> Active Loans</CardTitle>
-                        <CardDescription>You have no active loans with WealthWise.</CardDescription>
+                        <CardDescription>You have no active loans with ,ThuoX.</CardDescription>
                     </CardHeader>
                     <CardContent className="text-center text-muted-foreground">
                         <p>Your active loans will appear here.</p>

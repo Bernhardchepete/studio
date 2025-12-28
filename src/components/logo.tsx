@@ -7,7 +7,7 @@ export function Logo({ className }: { className?: string }) {
       <div className="bg-primary p-2 rounded-lg">
         <Wallet className="h-6 w-6 text-primary-foreground" />
       </div>
-      <h1 className="text-2xl font-bold text-primary">WealthWise</h1>
+      <h1 className="text-2xl font-bold text-primary">,ThuoX</h1>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import type { DemoData, DemoUser } from './';
 export const user: DemoUser = {
     id: 'kabelo',
     name: 'Kabelo',
-    email: 'kabelo.sme@wealthwise.app',
+    email: 'kabelo.sme@thuox.app',
     persona: 'The SME Owner',
     description: 'Juggling variable business income, Kabelo needs to track expenses meticulously and access working capital to grow his business.',
     avatarId: 'user-avatar-kabelo'

@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { DemoUserProvider } from '@/contexts/demo-user-context';
 
 export const metadata: Metadata = {
-  title: 'WealthWise',
+  title: ',ThuoX',
   description: 'Your personal financial operating system.',
 };
 

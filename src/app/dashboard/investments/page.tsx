@@ -49,7 +49,7 @@ export default function InvestmentsPage() {
 
     const newInvestment: Investment = {
       id: (investments.length + 1).toString(),
-      name: `WealthWise Growth Fund`,
+      name: `,ThuoX Growth Fund`,
       amount,
       startDate: new Date().toISOString(),
     };

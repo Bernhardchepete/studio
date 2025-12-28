@@ -28,7 +28,7 @@ export default function AccountSwitcherPage() {
         </div>
         <Card className="mb-8">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">Welcome to the WealthWise Demo</CardTitle>
+            <CardTitle className="text-3xl font-bold">Welcome to the ,ThuoX Demo</CardTitle>
             <CardDescription>Select a user profile to explore tailored financial experiences.</CardDescription>
           </CardHeader>
         </Card>

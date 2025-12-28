@@ -3,7 +3,7 @@ import type { DemoData, DemoUser } from './';
 export const user: DemoUser = {
     id: 'thabo',
     name: 'Thabo',
-    email: 'thabo.student@wealthwise.app',
+    email: 'thabo.student@thuox.app',
     persona: 'The Student',
     description: 'Balancing a school allowance and a side hustle, Thabo is focused on micro-saving and getting a head start on investing.',
     avatarId: 'user-avatar-thabo'
@@ -41,7 +41,7 @@ const budgets = [
 ];
 
 const investments = [
-    { id: '1', name: 'WealthWise Growth Fund', amount: 500, startDate: '2024-06-01' }
+    { id: '1', name: ',ThuoX Growth Fund', amount: 500, startDate: '2024-06-01' }
 ];
 
 const goals = [

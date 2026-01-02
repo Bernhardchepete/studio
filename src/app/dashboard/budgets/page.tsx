@@ -29,6 +29,25 @@ import { formatCurrency, cn } from "@/lib/utils";
 import { PlusCircle, MoreVertical, Zap, CircleDot, ShieldCheck, User, CheckCircle } from "lucide-react";
 import { Badge } from '@/components/ui/badge';
 import { useDemoUser } from '@/contexts/demo-user-context';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 
 const priorityConfig = {
     High: {
@@ -51,8 +70,89 @@ const priorityConfig = {
     Confirmation: { label: 'Confirmation', icon: ShieldCheck },
   };
 
+  const AddBudgetDialog = ({ onAddBudget }: { onAddBudget: (newBudget: Omit<Budget, 'id' | 'spent'>) => void }) => {
+    const [open, setOpen] = useState(false);
+    const [category, setCategory] = useState<Budget['category'] | ''>('');
+    const [allocated, setAllocated] = useState('');
+    const [priority, setPriority] = useState<Budget['priority']>('Medium');
+  
+    const handleSubmit = () => {
+      const allocatedAmount = parseFloat(allocated);
+      if (category && allocatedAmount > 0) {
+        onAddBudget({
+          category: category as Budget['category'],
+          allocated: allocatedAmount,
+          priority,
+          paymentMethod: 'Manual', // Default payment method
+        });
+        setOpen(false);
+        // Reset form
+        setCategory('');
+        setAllocated('');
+        setPriority('Medium');
+      }
+    };
+  
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button>
+            <PlusCircle className="mr-2 h-4 w-4" /> Add Budget
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add New Budget</DialogTitle>
+            <DialogDescription>
+              Create a new budget category for this month.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="category">Category</Label>
+              <Input 
+                id="category" 
+                placeholder="e.g., Groceries, Entertainment" 
+                value={category} 
+                // A simple text input for demo purposes. A select with predefined categories would be better.
+                onChange={(e) => setCategory(e.target.value as Budget['category'])}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="allocated">Allocated Amount (BWP)</Label>
+              <Input
+                id="allocated"
+                type="number"
+                placeholder="e.g., 500"
+                value={allocated}
+                onChange={(e) => setAllocated(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="priority">Priority</Label>
+              <Select value={priority} onValueChange={(value) => setPriority(value as Budget['priority'])}>
+                <SelectTrigger id="priority">
+                  <SelectValue placeholder="Select priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="High">High</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="Low">Low</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="submit" onClick={handleSubmit}>Add Budget</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  };
+
 export default function BudgetsPage() {
-  const { data } = useDemoUser();
+  const { data, updateData } = useDemoUser();
   const [budgets, setBudgets] = useState<Budget[]>([]);
 
   useEffect(() => {
@@ -62,13 +162,27 @@ export default function BudgetsPage() {
   }, [data]);
 
   const handlePaymentMethodChange = (budgetId: string, method: Budget['paymentMethod']) => {
-    setBudgets(currentBudgets => 
-      currentBudgets.map(b => 
-        b.id === budgetId ? { ...b, paymentMethod: method } : b
-      )
+    const updatedBudgets = budgets.map(b => 
+      b.id === budgetId ? { ...b, paymentMethod: method } : b
     );
+    setBudgets(updatedBudgets);
+    updateData({ budgets: updatedBudgets });
   };
   
+  const handleAddBudget = (newBudget: Omit<Budget, 'id' | 'spent'>) => {
+    if (!data) return;
+
+    const newBudgetItem: Budget = {
+      ...newBudget,
+      id: `budget-${Date.now()}`,
+      spent: 0,
+    };
+    
+    const updatedBudgets = [...budgets, newBudgetItem];
+    setBudgets(updatedBudgets);
+    updateData({ budgets: updatedBudgets });
+  };
+
   if (!data) return null;
 
   return (
@@ -77,13 +191,11 @@ export default function BudgetsPage() {
       <main className="flex-1 p-4 sm:p-6">
         <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold">Your Monthly Budgets</h2>
-            <Button>
-                <PlusCircle className="mr-2 h-4 w-4" /> Add Budget
-            </Button>
+            <AddBudgetDialog onAddBudget={handleAddBudget} />
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {budgets.map((budget) => {
-            const progress = (budget.spent / budget.allocated) * 100;
+            const progress = budget.allocated > 0 ? (budget.spent / budget.allocated) * 100 : 0;
             const remaining = budget.allocated - budget.spent;
             const isOverBudget = progress > 100;
             const PaymentIcon = paymentMethodConfig[budget.paymentMethod].icon;

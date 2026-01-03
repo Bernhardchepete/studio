@@ -1,9 +1,10 @@
+
 import type { DemoData, DemoUser } from './';
 
 export const user: DemoUser = {
     id: 'family',
     name: 'The Motswais',
-    email: 'family.motswai@thuox.app',
+    email: 'family.motswai@thuo.app',
     persona: 'The Family Account',
     description: 'A shared wallet for the Motswai family. Multiple members contribute towards common goals like holidays and home projects.',
     avatarId: 'user-avatar-family'

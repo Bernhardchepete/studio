@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -40,7 +41,7 @@ export default function LoginPage() {
         </div>
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">,ThuoX Demo</CardTitle>
+            <CardTitle className="text-3xl font-bold">Thuo Demo</CardTitle>
             <CardDescription>Select a user profile to explore the app</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">

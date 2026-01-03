@@ -1,9 +1,10 @@
+
 import type { DemoData, DemoUser } from './';
 
 export const user: DemoUser = {
     id: 'kabelo',
     name: 'Kabelo',
-    email: 'kabelo.sme@thuox.app',
+    email: 'kabelo.sme@thuo.app',
     persona: 'The SME Owner',
     description: 'Juggling variable business income, Kabelo needs to track expenses meticulously and access working capital to grow his business.',
     avatarId: 'user-avatar-kabelo'

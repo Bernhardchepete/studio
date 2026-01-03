@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -14,7 +15,7 @@ interface DemoUserContextType {
 
 const DemoUserContext = createContext<DemoUserContextType | undefined>(undefined);
 
-const USER_STORAGE_KEY = 'thuox_demo_user';
+const USER_STORAGE_KEY = 'thuo_demo_user';
 
 export const DemoUserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<DemoUser | null>(null);

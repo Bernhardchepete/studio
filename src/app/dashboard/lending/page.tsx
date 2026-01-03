@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useTransition } from 'react';
@@ -117,7 +118,7 @@ export default function LendingPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><Banknote /> Active Loans</CardTitle>
-                        <CardDescription>You have no active loans with ,ThuoX.</CardDescription>
+                        <CardDescription>You have no active loans with Thuo.</CardDescription>
                     </CardHeader>
                     <CardContent className="text-center text-muted-foreground">
                         <p>Your active loans will appear here.</p>

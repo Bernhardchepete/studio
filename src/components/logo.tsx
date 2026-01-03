@@ -1,3 +1,4 @@
+
 import { Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -7,7 +8,7 @@ export function Logo({ className }: { className?: string }) {
       <div className="bg-primary p-2 rounded-lg">
         <Wallet className="h-6 w-6 text-primary-foreground" />
       </div>
-      <h1 className="text-2xl font-bold text-primary">,ThuoX</h1>
+      <h1 className="text-2xl font-bold text-primary">Thuo</h1>
     </div>
   );
 }

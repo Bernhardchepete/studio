@@ -1,10 +1,11 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { DemoUserProvider } from '@/contexts/demo-user-context';
 
 export const metadata: Metadata = {
-  title: ',ThuoX',
+  title: 'Thuo',
   description: 'Your personal financial operating system.',
 };
 

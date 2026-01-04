@@ -24,7 +24,7 @@ const PersonalizedBudgetSuggestionsOutputSchema = z.object({
   suggestions: z
     .string()
     .describe(
-      'A detailed explanation of budget suggestions based on the provided income, expenses, and financial goals.'
+      'A concise, summarized, topic/heading style suggestion or call to action.'
     ),
 });
 export type PersonalizedBudgetSuggestionsOutput = z.infer<
@@ -41,14 +41,16 @@ const prompt = ai.definePrompt({
   name: 'personalizedBudgetSuggestionsPrompt',
   input: {schema: PersonalizedBudgetSuggestionsInputSchema},
   output: {schema: PersonalizedBudgetSuggestionsOutputSchema},
-  prompt: `Given the user's income, expenses, and financial goals, provide personalized budget suggestions.
+  prompt: `You are a financial advisor. Based on the user's financial data, provide a concise, actionable heading or call to action. 
+  
+  This should be a short phrase, not a full paragraph. For example: "Your 'Eating Out' budget is high, consider reviewing it" or "You're on track to hit your savings goal!".
 
-Income: {{income}}
-Expenses: {{#each expenses}}{{@key}}: {{this}}
-{{/each}}
-Financial Goals: {{financialGoals}}
-
-Suggestions:`,
+  Income: {{income}}
+  Expenses: {{#each expenses}}{{@key}}: {{this}}
+  {{/each}}
+  Financial Goals: {{financialGoals}}
+  
+  Provide just the heading-style suggestion.`,
 });
 
 const personalizedBudgetSuggestionsFlow = ai.defineFlow(

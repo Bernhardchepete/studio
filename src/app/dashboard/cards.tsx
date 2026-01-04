@@ -181,7 +181,7 @@ export function PerformanceChartCard() {
 
 export function AICopilotCard() {
   const [isPending, startTransition] = useTransition();
-  const [suggestion, setSuggestion] = useState('Click the button to get your first AI-powered suggestion!');
+  const [suggestion, setSuggestion] = useState("Your 'Food' budget is high, consider cutting back.");
   const { data } = useDemoUser();
 
   const handleGetSuggestion = () => {

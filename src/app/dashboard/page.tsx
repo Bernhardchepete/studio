@@ -23,7 +23,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-1 flex-col h-full">
       <DashboardHeader title="Dashboard" />
-      <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-6">
         <div className="grid gap-6">
           {/* 1. Financial Pulse */}
           <FinancialPulseCard />

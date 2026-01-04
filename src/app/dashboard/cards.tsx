@@ -316,25 +316,26 @@ export function FinancialPulseCard() {
     };
 
     return (
-        <Card className={cn("flex flex-col md:flex-row items-center justify-between p-6 gap-6", statusConfig[status].bgColor)}>
-            <div className="space-y-2">
-                <CardTitle className="text-base font-medium text-foreground/80">Safe to Spend</CardTitle>
-                <div className="flex items-baseline gap-2">
-                    <p className={cn("text-4xl font-bold", statusConfig[status].color)}>
-                        {formatCurrency(safeToSpend)}
-                    </p>
-                    <span className="text-sm font-medium text-foreground/60">
-                        this month
-                    </span>
+        <Card className={cn("flex flex-col gap-6 p-6", statusConfig[status].bgColor)}>
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                <div className="space-y-2">
+                    <CardTitle className="text-base font-medium text-foreground/80">Safe to Spend</CardTitle>
+                    <div className="flex items-baseline gap-2">
+                        <p className={cn("text-4xl font-bold", statusConfig[status].color)}>
+                            {formatCurrency(safeToSpend)}
+                        </p>
+                        <span className="text-sm font-medium text-foreground/60">
+                            this month
+                        </span>
+                    </div>
                 </div>
-                <p className="text-sm text-foreground/60">{statusConfig[status].message}</p>
+                 <Button variant="ghost" asChild className="w-full sm:w-auto">
+                    <Link href="/dashboard/transactions">
+                        View All Transactions <ArrowRight className="ml-2 h-4 w-4"/>
+                    </Link>
+                </Button>
             </div>
-             <Button variant="ghost" asChild className="w-full md:w-auto">
-                <Link href="/dashboard/transactions">
-                    View All Transactions <ArrowRight className="ml-2 h-4 w-4"/>
-                </Link>
-            </Button>
+            <p className="text-sm text-foreground/60">{statusConfig[status].message}</p>
         </Card>
     );
 }
-

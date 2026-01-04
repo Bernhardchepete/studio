@@ -35,7 +35,7 @@ export default function Dashboard() {
           {primaryGoal && <GoalProgressCard goal={primaryGoal} />}
 
           {/* 4. Key Metrics & Performance */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <OverviewCards />
           </div>
           <PerformanceChartCard />

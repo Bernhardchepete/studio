@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -6,6 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from "@/components/ui/card";
 import {
   DollarSign,
@@ -13,7 +15,8 @@ import {
   Sparkles,
   Loader2,
   TrendingUp,
-  Target
+  Target,
+  ArrowRight
 } from "lucide-react";
 import {
   Line,
@@ -24,11 +27,14 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { formatCurrency } from "@/lib/utils";
-import { useState, useTransition } from "react";
+import { formatCurrency, cn } from "@/lib/utils";
+import { useState, useTransition, useEffect } from "react";
 import { generateFinancialSummary } from '@/ai/flows/generate-financial-summary';
+import { getPersonalizedBudgetSuggestions } from '@/ai/flows/personalized-budget-suggestions';
 import { Button } from "@/components/ui/button";
 import { useDemoUser } from "@/contexts/demo-user-context";
+import { Progress } from "@/components/ui/progress";
+import Link from 'next/link';
 
 export function OverviewCards() {
   const { user, data } = useDemoUser();
@@ -46,28 +52,28 @@ export function OverviewCards() {
 
   const overviewData = [
     {
-      title: "Monthly Income",
+      title: "Total Income",
       value: totalIncome,
       icon: DollarSign,
-      change: "+12% from last month",
+      change: "This month",
     },
     {
-      title: "Monthly Expenses",
+      title: "Total Expenses",
       value: totalExpenses,
       icon: Wallet,
-      change: "-5% from last month",
+      change: "This month",
     },
     {
       title: "Total Invested",
       value: totalInvested,
       icon: TrendingUp,
-      change: "20% avg. return",
+      change: `25% projected m/m return`,
     },
     {
       title: "Goal Savings",
       value: totalGoalSavings,
       icon: Target,
-      change: "On track for your goals!",
+      change: "Across all goals",
     },
   ];
 
@@ -172,29 +178,36 @@ export function PerformanceChartCard() {
 }
 
 
-export function AIInsightsCard() {
+export function AICopilotCard() {
   const [isPending, startTransition] = useTransition();
-  const [summary, setSummary] = useState('');
+  const [suggestion, setSuggestion] = useState('');
   const { data } = useDemoUser();
 
-  const handleGenerateSummary = () => {
+  useEffect(() => {
     if (!data) return;
     
     startTransition(async () => {
-      const incomeString = data.transactions.filter(t => t.type === 'income').map(t => `${t.description}: ${formatCurrency(t.amount)}`).join(', ');
-      const expensesString = data.transactions.filter(t => t.type === 'expense').map(t => `${t.category} - ${t.description}: ${formatCurrency(t.amount)}`).join(', ');
-      const totalInvested = data.investments.reduce((sum, inv) => sum + inv.amount, 0);
-      const totalGoalSavings = data.goals.reduce((sum, goal) => sum + goal.saved, 0);
+      const expenseMap = data.transactions
+        .filter(t => t.type === 'expense')
+        .reduce((acc, t) => {
+            if (!acc[t.category]) {
+                acc[t.category] = 0;
+            }
+            acc[t.category] += t.amount;
+            return acc;
+        }, {} as Record<string, number>);
 
-      const result = await generateFinancialSummary({
-        assets: `Total Investments: ${formatCurrency(totalInvested)}, Goal Savings: ${formatCurrency(totalGoalSavings)}`,
-        liabilities: 'No liabilities',
-        income: incomeString,
-        expenses: expensesString,
+      const totalIncome = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+
+      const result = await getPersonalizedBudgetSuggestions({
+        income: totalIncome,
+        expenses: expenseMap,
+        financialGoals: data.goals.map(g => g.name).join(', '),
       });
-      setSummary(result.summary);
+      setSuggestion(result.suggestions);
     });
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <Card className="bg-gradient-to-br from-primary/10 to-background">
@@ -202,38 +215,126 @@ export function AIInsightsCard() {
         <div>
           <CardTitle className="text-primary flex items-center gap-2">
             <Sparkles className="h-5 w-5" />
-            AI Financial Summary
+            AI Co-pilot
           </CardTitle>
           <CardDescription>
-            Get an AI-powered overview of your financial health.
+            Your AI-powered financial assistant.
           </CardDescription>
         </div>
-        <Button onClick={handleGenerateSummary} disabled={isPending}>
-          {isPending ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Sparkles className="mr-2 h-4 w-4" />
-          )}
-          Generate
-        </Button>
       </CardHeader>
       <CardContent>
         {isPending && (
           <div className="space-y-2">
              <div className="h-4 bg-muted-foreground/10 rounded-md animate-pulse" />
              <div className="h-4 bg-muted-foreground/10 rounded-md animate-pulse w-5/6" />
-             <div className="h-4 bg-muted-foreground/10 rounded-md animate-pulse w-3/4" />
           </div>
         )}
-        {summary && !isPending && (
+        {suggestion && !isPending && (
           <div className="prose prose-sm max-w-none text-foreground/90">
-            <p>{summary}</p>
+            <p>{suggestion}</p>
           </div>
         )}
-         {!summary && !isPending && (
-            <p className="text-sm text-muted-foreground">Click "Generate" to get your personalized financial summary.</p>
+         {!suggestion && !isPending && (
+            <p className="text-sm text-muted-foreground">Analyzing your finances for suggestions...</p>
          )}
       </CardContent>
+       {suggestion && !isPending && (
+        <CardFooter className="gap-2">
+          <Button size="sm" asChild>
+            <Link href="/dashboard/digital-twin">
+                <Sparkles className="mr-2 h-4 w-4" /> Simulate a Scenario
+            </Link>
+          </Button>
+          <Button size="sm" variant="secondary" asChild>
+             <Link href="/dashboard/budgets">Adjust Budgets</Link>
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }
+
+
+export function FinancialPulseCard() {
+    const { data } = useDemoUser();
+    const [safeToSpend, setSafeToSpend] = useState(0);
+    const [status, setStatus] = useState<'safe' | 'caution' | 'risk'>('safe');
+
+    useEffect(() => {
+        if (!data) return;
+
+        const totalIncome = data.transactions
+            .filter(t => t.type === 'income')
+            .reduce((sum, t) => sum + t.amount, 0);
+
+        const totalSpent = data.transactions
+            .filter(t => t.type === 'expense')
+            .reduce((sum, t) => sum + t.amount, 0);
+        
+        const totalBudgeted = data.budgets.reduce((sum, b) => sum + b.allocated, 0);
+        
+        // A simple calculation for "safe to spend"
+        // (Total Income - Total Budgeted for month) = Discretionary spending
+        const discretionary = totalIncome - totalBudgeted;
+
+        // Of the discretionary money, how much is left after all actual expenses.
+        // This calculation is a bit flawed for a real app but works for demo.
+        // A better way would be: (Income - Fixed/Budgeted Expenses) - Discretionary Spending so far.
+        const remaining = totalIncome - totalSpent;
+        setSafeToSpend(remaining);
+
+        const spentPercentage = (totalSpent / totalIncome) * 100;
+
+        if (spentPercentage > 90) {
+            setStatus('risk');
+        } else if (spentPercentage > 70) {
+            setStatus('caution');
+        } else {
+            setStatus('safe');
+        }
+    }, [data]);
+
+    const statusConfig = {
+        safe: {
+            color: 'text-green-600',
+            bgColor: 'bg-green-500/10',
+            progressColor: 'bg-green-500',
+            message: 'You are on track this month.'
+        },
+        caution: {
+            color: 'text-yellow-600',
+            bgColor: 'bg-yellow-500/10',
+            progressColor: 'bg-yellow-500',
+            message: 'Your spending is higher than usual.'
+        },
+        risk: {
+            color: 'text-red-600',
+            bgColor: 'bg-red-500/10',
+            progressColor: 'bg-red-500',
+            message: 'You are close to exceeding your income.'
+        }
+    };
+
+    return (
+        <Card className={cn("flex flex-col md:flex-row items-center justify-between p-6 gap-6", statusConfig[status].bgColor)}>
+            <div className="space-y-2">
+                <CardTitle className="text-base font-medium text-foreground/80">Safe to Spend</CardTitle>
+                <div className="flex items-baseline gap-2">
+                    <p className={cn("text-4xl font-bold", statusConfig[status].color)}>
+                        {formatCurrency(safeToSpend)}
+                    </p>
+                    <span className="text-sm font-medium text-foreground/60">
+                        this month
+                    </span>
+                </div>
+                <p className="text-sm text-foreground/60">{statusConfig[status].message}</p>
+            </div>
+             <Button variant="ghost" asChild className="w-full md:w-auto">
+                <Link href="/dashboard/transactions">
+                    View All Transactions <ArrowRight className="ml-2 h-4 w-4"/>
+                </Link>
+            </Button>
+        </Card>
+    );
+}
+

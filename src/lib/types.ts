@@ -13,9 +13,11 @@ export type Transaction = {
   }
 };
 
+export type BudgetCategory = 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Cape Town Trip' | 'Family Reunion' | 'Emergency Fund' | 'Device Upgrade';
+
 export type Budget = {
   id: string;
-  category: 'Housing' | 'Food' | 'Transport' | 'Entertainment' | 'Utilities' | 'Other' | 'Investment' | 'Cape Town Trip' | 'Family Reunion' | 'Emergency Fund' | 'Device Upgrade';
+  category: BudgetCategory;
   allocated: number;
   spent: number;
   priority: 'High' | 'Medium' | 'Low';

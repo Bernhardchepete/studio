@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Progress } from "@/components/ui/progress";
-import type { Budget } from '@/lib/types';
+import type { Budget, BudgetCategory } from '@/lib/types';
 import { formatCurrency, cn } from "@/lib/utils";
 import { PlusCircle, MoreVertical, Zap, CircleDot, ShieldCheck, User, CheckCircle } from "lucide-react";
 import { Badge } from '@/components/ui/badge';
@@ -73,7 +73,7 @@ const priorityConfig = {
 
   const AddBudgetDialog = ({ onAddBudget }: { onAddBudget: (newBudget: Omit<Budget, 'id' | 'spent'>) => void }) => {
     const [open, setOpen] = useState(false);
-    const [category, setCategory] = useState<Budget['category'] | ''>('');
+    const [category, setCategory] = useState<BudgetCategory | ''>('');
     const [allocated, setAllocated] = useState('');
     const [priority, setPriority] = useState<Budget['priority']>('Medium');
   
@@ -81,7 +81,7 @@ const priorityConfig = {
       const allocatedAmount = parseFloat(allocated);
       if (category && allocatedAmount > 0) {
         onAddBudget({
-          category: category as Budget['category'],
+          category: category as BudgetCategory,
           allocated: allocatedAmount,
           priority,
           paymentMethod: 'Manual', // Default payment method
@@ -116,7 +116,7 @@ const priorityConfig = {
                 placeholder="e.g., Groceries, Entertainment" 
                 value={category} 
                 // A simple text input for demo purposes. A select with predefined categories would be better.
-                onChange={(e) => setCategory(e.target.value as Budget['category'])}
+                onChange={(e) => setCategory(e.target.value as BudgetCategory)}
               />
             </div>
             <div className="space-y-2">

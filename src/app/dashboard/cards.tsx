@@ -16,7 +16,8 @@ import {
   Loader2,
   TrendingUp,
   Target,
-  ArrowRight
+  ArrowRight,
+  RefreshCw
 } from "lucide-react";
 import {
   Line,
@@ -180,34 +181,38 @@ export function PerformanceChartCard() {
 
 export function AICopilotCard() {
   const [isPending, startTransition] = useTransition();
-  const [suggestion, setSuggestion] = useState('');
+  const [suggestion, setSuggestion] = useState('Click the button to get your first AI-powered suggestion!');
   const { data } = useDemoUser();
 
-  useEffect(() => {
+  const handleGetSuggestion = () => {
     if (!data) return;
-    
+
     startTransition(async () => {
-      const expenseMap = data.transactions
-        .filter(t => t.type === 'expense')
-        .reduce((acc, t) => {
-            if (!acc[t.category]) {
-                acc[t.category] = 0;
-            }
-            acc[t.category] += t.amount;
-            return acc;
-        }, {} as Record<string, number>);
+        const expenseMap = data.transactions
+            .filter(t => t.type === 'expense')
+            .reduce((acc, t) => {
+                if (!acc[t.category]) {
+                    acc[t.category] = 0;
+                }
+                acc[t.category] += t.amount;
+                return acc;
+            }, {} as Record<string, number>);
 
-      const totalIncome = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+        const totalIncome = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
 
-      const result = await getPersonalizedBudgetSuggestions({
-        income: totalIncome,
-        expenses: expenseMap,
-        financialGoals: data.goals.map(g => g.name).join(', '),
-      });
-      setSuggestion(result.suggestions);
+        try {
+            const result = await getPersonalizedBudgetSuggestions({
+                income: totalIncome,
+                expenses: expenseMap,
+                financialGoals: data.goals.map(g => g.name).join(', '),
+            });
+            setSuggestion(result.suggestions);
+        } catch (error) {
+            console.error("Failed to get suggestion:", error);
+            setSuggestion("Sorry, I couldn't get a suggestion right now. Please try again in a moment.");
+        }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }
 
   return (
     <Card className="bg-gradient-to-br from-primary/10 to-background">
@@ -221,6 +226,10 @@ export function AICopilotCard() {
             Your AI-powered financial assistant.
           </CardDescription>
         </div>
+        <Button size="icon" variant="ghost" onClick={handleGetSuggestion} disabled={isPending}>
+            {isPending ? <Loader2 className="h-4 w-4 animate-spin"/> : <RefreshCw className="h-4 w-4" />}
+            <span className="sr-only">Refresh suggestion</span>
+        </Button>
       </CardHeader>
       <CardContent>
         {isPending && (
@@ -229,16 +238,13 @@ export function AICopilotCard() {
              <div className="h-4 bg-muted-foreground/10 rounded-md animate-pulse w-5/6" />
           </div>
         )}
-        {suggestion && !isPending && (
+        {!isPending && (
           <div className="prose prose-sm max-w-none text-foreground/90">
             <p>{suggestion}</p>
           </div>
         )}
-         {!suggestion && !isPending && (
-            <p className="text-sm text-muted-foreground">Analyzing your finances for suggestions...</p>
-         )}
       </CardContent>
-       {suggestion && !isPending && (
+       {!isPending && (
         <CardFooter className="gap-2">
           <Button size="sm" asChild>
             <Link href="/dashboard/digital-twin">

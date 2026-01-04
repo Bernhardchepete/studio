@@ -84,8 +84,8 @@ export default function InvestmentsPage() {
   return (
     <div className="flex flex-1 flex-col">
       <DashboardHeader title="Investments" />
-      <main className="flex-1 p-4 sm:p-6 grid gap-6 md:grid-cols-2">
-        <div className="md:col-span-2 grid gap-6 lg:grid-cols-2">
+      <main className="flex-1 p-4 sm:p-6 grid gap-6 md:grid-cols-1">
+        <div className="grid gap-6 lg:grid-cols-2">
             <Card>
             <CardHeader>
                 <CardTitle>Invest Your Money</CardTitle>
@@ -137,7 +137,7 @@ export default function InvestmentsPage() {
                 </CardContent>
             </Card>
         </div>
-        <Card className="md:col-span-2">
+        <Card>
           <CardHeader>
             <CardTitle>Your Investment Portfolio</CardTitle>
           </CardHeader>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -193,7 +194,7 @@ export default function BudgetsPage() {
             <h2 className="text-xl font-semibold">Your Monthly Budgets</h2>
             <AddBudgetDialog onAddBudget={handleAddBudget} />
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {budgets.map((budget) => {
             const progress = budget.allocated > 0 ? (budget.spent / budget.allocated) * 100 : 0;
             const remaining = budget.allocated - budget.spent;

@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -146,7 +147,7 @@ export default function ReceiptsPage() {
     <div className="flex flex-1 flex-col h-full">
       <DashboardHeader title="Receipts & Spend Intelligence" />
       <main className="flex-1 overflow-y-auto p-4 sm:p-6">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-6">
             <InsightWidget title="This Month's Spend" value={formatCurrency(totalSpend)} icon={Receipt}/>
             <InsightWidget title="Top Category" value="Food" icon={Tag}/>
             <InsightWidget title="Top Merchant" value="Shoprite" icon={Landmark}/>
@@ -195,24 +196,26 @@ export default function ReceiptsPage() {
                                 </div>
                             </CardHeader>
                             <CardContent className="p-4">
-                               <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Item</TableHead>
-                                            <TableHead className="text-center">Qty</TableHead>
-                                            <TableHead className="text-right">Price</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {receipt.items.map((item, index) => (
-                                            <TableRow key={index}>
-                                                <TableCell>{item.name}</TableCell>
-                                                <TableCell className="text-center">{item.quantity}</TableCell>
-                                                <TableCell className="text-right">{formatCurrency(item.price)}</TableCell>
+                               <div className="overflow-x-auto">
+                                <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Item</TableHead>
+                                                <TableHead className="text-center">Qty</TableHead>
+                                                <TableHead className="text-right">Price</TableHead>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                               </Table>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {receipt.items.map((item, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell>{item.name}</TableCell>
+                                                    <TableCell className="text-center">{item.quantity}</TableCell>
+                                                    <TableCell className="text-right">{formatCurrency(item.price)}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                </Table>
+                               </div>
                                <div className="mt-4 pt-4 border-t space-y-2">
                                     <div className="flex justify-between text-sm">
                                         <span className="text-muted-foreground">Subtotal</span>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { DashboardHeader } from "@/components/dashboard-header";
@@ -12,7 +13,7 @@ export default function Dashboard() {
     <div className="flex flex-1 flex-col h-full">
       <DashboardHeader title="Dashboard" />
       <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <OverviewCards />
         </div>
         <div className="grid gap-6 mt-6">

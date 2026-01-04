@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useTransition, useEffect } from 'react';
@@ -167,7 +168,7 @@ export default function GoalsPage() {
                 <PlusCircle className="mr-2 h-4 w-4" /> Add Goal
             </Button>
         </div>
-        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-2">
           {data.goals.map((goal) => (
             <GoalCard key={goal.id} goal={goal} />
           ))}

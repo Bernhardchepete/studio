@@ -104,8 +104,8 @@ export default function LendingPage() {
     return (
         <div className="flex flex-1 flex-col">
             <DashboardHeader title="Lending" />
-            <main className="flex-1 p-4 sm:p-6 grid gap-6 md:grid-cols-2">
-                <Card className="md:col-span-2">
+            <main className="flex-1 p-4 sm:p-6 grid gap-6 md:grid-cols-1">
+                <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><ShieldCheck /> Loan Eligibility</CardTitle>
                         <CardDescription>Based on your financial data, our AI has determined your eligibility status.</CardDescription>
@@ -115,30 +115,32 @@ export default function LendingPage() {
                     </CardContent>
                 </Card>
                 
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Banknote /> Active Loans</CardTitle>
-                        <CardDescription>You have no active loans with Thuo.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="text-center text-muted-foreground">
-                        <p>Your active loans will appear here.</p>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Upload /> Document Center</CardTitle>
-                        <CardDescription>Upload the required documents to complete your profile for faster loan processing.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        {Object.entries(documentConfig).map(([key, {label, icon: Icon}]) => (
-                            <div key={key} className="space-y-2">
-                                <Label htmlFor={key} className="flex items-center gap-2"><Icon className="h-4 w-4 text-muted-foreground" /> {label}</Label>
-                                <Input id={key} type="file" />
-                            </div>
-                        ))}
-                         <Button className="w-full">Upload All Documents</Button>
-                    </CardContent>
-                </Card>
+                <div className="grid gap-6 sm:grid-cols-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><Banknote /> Active Loans</CardTitle>
+                            <CardDescription>You have no active loans with Thuo.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="text-center text-muted-foreground">
+                            <p>Your active loans will appear here.</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><Upload /> Document Center</CardTitle>
+                            <CardDescription>Upload the required documents to complete your profile for faster loan processing.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {Object.entries(documentConfig).map(([key, {label, icon: Icon}]) => (
+                                <div key={key} className="space-y-2">
+                                    <Label htmlFor={key} className="flex items-center gap-2"><Icon className="h-4 w-4 text-muted-foreground" /> {label}</Label>
+                                    <Input id={key} type="file" />
+                                </div>
+                            ))}
+                            <Button className="w-full">Upload All Documents</Button>
+                        </CardContent>
+                    </Card>
+                </div>
             </main>
         </div>
     );

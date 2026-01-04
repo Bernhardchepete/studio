@@ -1,3 +1,4 @@
+
 'use client';
 
 import { DashboardHeader } from "@/components/dashboard-header";
@@ -31,7 +32,7 @@ export default function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
                   <Input id="firstName" defaultValue={user?.name.split(' ')[0]} />

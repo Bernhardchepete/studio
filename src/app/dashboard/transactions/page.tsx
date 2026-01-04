@@ -19,8 +19,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, ArrowDownLeft, PlusCircle, MoreHorizontal, ShoppingCart, Bus } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { ArrowUpRight, ArrowDownLeft, PlusCircle, MoreHorizontal, ShoppingCart, Bus, MoreVertical } from "lucide-react";
+import { formatCurrency, cn } from "@/lib/utils";
 import type { Transaction } from '@/lib/types';
 import {
   DropdownMenu,
@@ -88,8 +88,45 @@ const TransactionDetailsDialog = ({ transaction }: { transaction: Transaction })
     );
   };
 
+const TransactionRow = ({ transaction, onViewDetails }: { transaction: Transaction, onViewDetails: (t: Transaction) => void}) => {
+    const isIncome = transaction.type === 'income';
+    return (
+        <div className="flex items-center justify-between p-4 border-b">
+            <div className="flex items-center gap-4">
+                <div className={cn("h-10 w-10 rounded-full flex items-center justify-center", isIncome ? "bg-green-100 dark:bg-green-900" : "bg-red-100 dark:bg-red-900")}>
+                    {isIncome ? <ArrowDownLeft className="h-5 w-5 text-green-600 dark:text-green-400"/> : <ArrowUpRight className="h-5 w-5 text-red-600 dark:text-red-400"/>}
+                </div>
+                <div className="grid gap-0.5">
+                    <p className="font-medium">{transaction.description}</p>
+                    <p className="text-sm text-muted-foreground">{new Date(transaction.date).toLocaleDateString()} &middot; {transaction.category}</p>
+                </div>
+            </div>
+            <div className="flex items-center gap-2">
+                <p className={cn("font-semibold", isIncome ? "text-green-600" : "")}>{formatCurrency(transaction.amount)}</p>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                    <Button aria-haspopup="true" size="icon" variant="ghost">
+                        <MoreVertical className="h-4 w-4" />
+                        <span className="sr-only">Toggle menu</span>
+                    </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem onSelect={() => onViewDetails(transaction)} disabled={!transaction.details}>
+                            View Details
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+        </div>
+    )
+}
+
 export default function TransactionsPage() {
-  const { data } = useDemoUser();
+  const { data, updateData } = useDemoUser();
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
   const [isSendDialogOpen, setSendDialogOpen] = React.useState(false);
   const [isDetailsDialogOpen, setDetailsDialogOpen] = React.useState(false);
@@ -99,10 +136,12 @@ export default function TransactionsPage() {
     if (data) {
         setTransactions(data.transactions);
     }
-  }, [data]);
+  }, [data, updateData]);
 
   const handleSendMoney = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if(!data) return;
+
     const formData = new FormData(e.currentTarget);
     const amount = parseFloat(formData.get('amount') as string);
     const recipient = formData.get('recipient') as string;
@@ -115,8 +154,9 @@ export default function TransactionsPage() {
       amount: amount,
       type: 'expense',
     };
-
-    setTransactions([newTransaction, ...transactions]);
+    
+    const newTransactions = [newTransaction, ...transactions];
+    updateData({ transactions: newTransactions });
     setSendDialogOpen(false);
   };
 
@@ -188,62 +228,72 @@ export default function TransactionsPage() {
               </span>
             </Button>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <Dialog open={isDetailsDialogOpen} onOpenChange={setDetailsDialogOpen}>
-                <Table>
-                <TableHeader>
-                    <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                    <TableHead>
-                        <span className="sr-only">Actions</span>
-                    </TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {transactions.map((transaction) => (
-                    <TableRow key={transaction.id}>
-                        <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
-                        <TableCell className="font-medium">{transaction.description}</TableCell>
-                        <TableCell>
-                        <Badge variant="outline">{transaction.category}</Badge>
-                        </TableCell>
-                        <TableCell>
-                        <Badge variant={transaction.type === 'income' ? 'default' : 'secondary'}>{transaction.type}</Badge>
-                        </TableCell>
-                        <TableCell
-                        className={`text-right font-medium ${
-                            transaction.type === "income" ? "text-green-600" : ""
-                        }`}
-                        >
-                        {formatCurrency(transaction.amount)}
-                        </TableCell>
-                        <TableCell>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                            </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onSelect={() => handleViewDetails(transaction)} disabled={!transaction.details}>
-                                View Details
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                        </TableCell>
-                    </TableRow>
+                {/* Mobile List View */}
+                <div className="sm:hidden">
+                    {transactions.map(transaction => (
+                        <TransactionRow key={transaction.id} transaction={transaction} onViewDetails={handleViewDetails} />
                     ))}
-                </TableBody>
-                </Table>
+                </div>
+
+                {/* Desktop Table View */}
+                <div className="hidden sm:block">
+                    <Table>
+                    <TableHeader>
+                        <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead className="text-right">Amount</TableHead>
+                        <TableHead>
+                            <span className="sr-only">Actions</span>
+                        </TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {transactions.map((transaction) => (
+                        <TableRow key={transaction.id}>
+                            <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
+                            <TableCell className="font-medium">{transaction.description}</TableCell>
+                            <TableCell>
+                            <Badge variant="outline">{transaction.category}</Badge>
+                            </TableCell>
+                            <TableCell>
+                            <Badge variant={transaction.type === 'income' ? 'default' : 'secondary'}>{transaction.type}</Badge>
+                            </TableCell>
+                            <TableCell
+                            className={`text-right font-medium ${
+                                transaction.type === "income" ? "text-green-600" : ""
+                            }`}
+                            >
+                            {formatCurrency(transaction.amount)}
+                            </TableCell>
+                            <TableCell>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                <Button aria-haspopup="true" size="icon" variant="ghost">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                    <span className="sr-only">Toggle menu</span>
+                                </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuItem onSelect={() => handleViewDetails(transaction)} disabled={!transaction.details}>
+                                    View Details
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            </TableCell>
+                        </TableRow>
+                        ))}
+                    </TableBody>
+                    </Table>
+                </div>
                 {selectedTransaction && <TransactionDetailsDialog transaction={selectedTransaction} />}
             </Dialog>
           </CardContent>
@@ -252,3 +302,5 @@ export default function TransactionsPage() {
     </div>
   );
 }
+
+    

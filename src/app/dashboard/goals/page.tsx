@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { formatCurrency } from "@/lib/utils";
-import type { Goal } from '@/lib/types';
-import { PlusCircle, Target, Bot, Loader2, Gauge, RefreshCw } from 'lucide-react';
-import { generateGoalPlan } from '@/ai/flows/generate-goal-plan';
+import type { Goal, BudgetCategory } from '@/lib/types';
+import { PlusCircle, Target, Bot, Loader2, Gauge, RefreshCw, Sparkles } from 'lucide-react';
+import { generateGoalPlan, GoalPlanOutput } from '@/ai/flows/generate-goal-plan';
 import { Badge } from '@/components/ui/badge';
 import { differenceInMonths, formatDistanceToNow } from 'date-fns';
 import { useDemoUser } from '@/contexts/demo-user-context';
@@ -26,9 +26,9 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const GoalCard = ({ goal }: { goal: Goal }) => {
   const [isPending, startTransition] = useTransition();
-  const [plan, setPlan] = useState<{ plan: string, probability: number } | null>(null);
+  const [plan, setPlan] = useState<GoalPlanOutput | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { data } = useDemoUser();
+  const { data, updateData } = useDemoUser();
 
   const progress = (goal.saved / goal.target) * 100;
   const deadlineDate = new Date(goal.deadline);
@@ -42,6 +42,7 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
     const totalIncome = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
 
     setError(null);
+    setPlan(null);
     startTransition(async () => {
       try {
         const result = await generateGoalPlan({
@@ -49,7 +50,8 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
           goalAmount: goal.target,
           currentSavings: goal.saved,
           deadline: goal.deadline,
-          monthlyIncome: totalIncome
+          monthlyIncome: totalIncome,
+          budgets: data.budgets.map(b => ({category: b.category, allocated: b.allocated, spent: b.spent})),
         });
         setPlan(result);
       } catch (e) {
@@ -59,11 +61,29 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
     });
   };
 
-  useEffect(() => {
-    // Automatically generate plan when the component mounts
-    handleGeneratePlan();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]); 
+  const handleExecuteAction = (action: GoalPlanOutput['plan'][0]['action']) => {
+    if (!data) return;
+
+    if (action.type === 'ADJUST_BUDGET') {
+      const updatedBudgets = data.budgets.map(budget => {
+        if (budget.category === action.category) {
+          return { ...budget, allocated: action.newAllocatedAmount };
+        }
+        return budget;
+      });
+      updateData({ budgets: updatedBudgets });
+
+      // Remove the executed plan to show it's done
+      setPlan(prevPlan => {
+        if (!prevPlan) return null;
+        return {
+            ...prevPlan,
+            plan: prevPlan.plan.filter(p => p.action.category !== action.category)
+        }
+      });
+    }
+  };
+
 
   return (
     <Card className="flex flex-col overflow-hidden">
@@ -110,19 +130,44 @@ const GoalCard = ({ goal }: { goal: Goal }) => {
         </div>
 
         <div className="space-y-4">
-            <div className="flex items-center gap-2">
-                <Gauge className="text-primary"/>
-                <h3 className="font-semibold">AI Probability &amp; Plan</h3>
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <Gauge className="text-primary"/>
+                    <h3 className="font-semibold">AI Probability &amp; Plan</h3>
+                </div>
+                <Button variant="ghost" size="icon" onClick={handleGeneratePlan} disabled={isPending}>
+                    <RefreshCw className="h-4 w-4" />
+                </Button>
             </div>
+
             {plan && !isPending && !error && (
-                <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
+                <div className="flex items-start gap-4 p-3 rounded-lg bg-muted/50">
                     <div className="text-center">
                         <p className="text-2xl font-bold text-primary">{Math.round(plan.probability * 100)}%</p>
                         <p className="text-xs text-muted-foreground">Success Rate</p>
                     </div>
-                    <p className="text-sm text-foreground/80 border-l pl-4">{plan.plan}</p>
+                    <div className="flex-1 space-y-3 border-l pl-4">
+                        {plan.plan.length > 0 ? plan.plan.map((p, i) => (
+                           <div key={i} className="space-y-2">
+                             <p className="text-sm text-foreground/80">{p.suggestion}</p>
+                             <Button size="sm" onClick={() => handleExecuteAction(p.action)}>
+                               <Sparkles className="mr-2 h-4 w-4" />
+                               Do it for me
+                             </Button>
+                           </div>
+                        )) : (
+                            <p className="text-sm text-foreground/80">You're on track! No adjustments needed right now.</p>
+                        )}
+                    </div>
                 </div>
             )}
+            {!plan && !isPending && !error && (
+                 <div className="text-center p-4 border-2 border-dashed rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-2">Click to get an AI-powered plan to reach your goal faster.</p>
+                    <Button onClick={handleGeneratePlan}>Generate Plan</Button>
+                </div>
+            )}
+
             {isPending && (
                 <div className="space-y-2 p-3 rounded-lg bg-muted/50">
                     <div className="h-4 bg-muted-foreground/10 rounded-md animate-pulse w-1/3" />

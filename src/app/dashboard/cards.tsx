@@ -188,11 +188,11 @@ export function PerformanceChartCard() {
 
 export function AICopilotCard() {
   const [isPending, startTransition] = useTransition();
-  const [suggestions, setSuggestions] = useState<string[]>(["What if you invested your BWP 500 surplus?"]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const { data } = useDemoUser();
 
   const plugin = useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true })
+    Autoplay({ delay: 8000, stopOnInteraction: true })
   );
 
   const handleGetSuggestion = () => {
@@ -230,7 +230,7 @@ export function AICopilotCard() {
   useEffect(() => {
     handleGetSuggestion();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data]);
 
   return (
     <Card className="bg-gradient-to-br from-primary/10 to-background">

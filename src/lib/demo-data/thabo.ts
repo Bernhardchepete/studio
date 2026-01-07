@@ -12,6 +12,7 @@ export const user: DemoUser = {
 
 const transactions = [
     { id: '1', date: '2024-07-28', description: 'School Allowance', category: 'Allowance', amount: 1900, type: 'income' },
+    { id: '2', date: '2024-07-15', description: 'Side Hustle - Tutoring', category: 'Income', amount: 500, type: 'income' },
     { id: '3', date: '2024-07-01', description: 'Rent Contribution', category: 'Housing', amount: 1000, type: 'expense' },
     { id: '4', date: '2024-07-26', description: 'Weekly Groceries', category: 'Food', amount: 120, type: 'expense', details: { items: ['Milk', 'Bread', 'Eggs', 'Chicken Breasts', 'Rice'] } },
     { id: '5', date: '2024-07-22', description: 'Trip to University', category: 'Transport', amount: 80, type: 'expense', details: { from: 'Home (Gaborone West)', to: 'University of Botswana' } },
@@ -23,11 +24,11 @@ const transactions = [
     { id: '11', date: '2024-07-01', description: 'Books & Supplies', category: 'Other', amount: 200, type: 'expense' },
 ];
 
-const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0); // 1900
-const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0); // 1930 -> This is now 1930
-const whatsLeft = totalIncome - totalExpenses; // -30
-const investmentAmount = whatsLeft > 0 ? whatsLeft * 0.6 : 0; // 0
-const goalAmount = whatsLeft > 0 ? whatsLeft * 0.4 : 0; // 0
+const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+const whatsLeft = totalIncome - totalExpenses;
+const investmentAmount = whatsLeft > 0 ? whatsLeft * 0.6 : 0;
+const goalAmount = whatsLeft > 0 ? whatsLeft * 0.4 : 0;
 
 const budgets = [
     { id: '1', category: 'Housing', allocated: 1000, spent: 1000, priority: 'High', paymentMethod: 'Automatic' },
@@ -59,10 +60,10 @@ const goals = [
 const sixMonthPerformance = [
     { month: 'Feb', income: 1900, expenses: 1800, net: 100 },
     { month: 'Mar', income: 1900, expenses: 1900, net: 0 },
-    { month: 'Apr', income: 1900, expenses: 1850, net: 50 },
-    { month: 'May', income: 1900, expenses: 1950, net: -50 },
-    { month: 'Jun', income: 1900, expenses: 1800, net: 100 },
-    { month: 'Jul', income: 1900, expenses: 1930, net: -30 },
+    { month: 'Apr', income: 2400, expenses: 1850, net: 550 },
+    { month: 'May', income: 2400, expenses: 1950, net: 450 },
+    { month: 'Jun', income: 2400, expenses: 1800, net: 600 },
+    { month: 'Jul', income: 2400, expenses: 1930, net: 470 },
 ];
 
 const receipts = [

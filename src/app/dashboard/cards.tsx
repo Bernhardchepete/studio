@@ -10,6 +10,14 @@ import {
   CardFooter
 } from "@/components/ui/card";
 import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import {
   DollarSign,
   Wallet,
   Sparkles,
@@ -29,8 +37,7 @@ import {
   Legend,
 } from "recharts";
 import { formatCurrency, cn } from "@/lib/utils";
-import { useState, useTransition, useEffect } from "react";
-import { generateFinancialSummary } from '@/ai/flows/generate-financial-summary';
+import { useState, useTransition, useEffect, useRef } from "react";
 import { getPersonalizedBudgetSuggestions } from '@/ai/flows/personalized-budget-suggestions';
 import { Button } from "@/components/ui/button";
 import { useDemoUser } from "@/contexts/demo-user-context";
@@ -181,8 +188,12 @@ export function PerformanceChartCard() {
 
 export function AICopilotCard() {
   const [isPending, startTransition] = useTransition();
-  const [suggestion, setSuggestion] = useState("Your 'Food' budget is high, consider cutting back.");
+  const [suggestions, setSuggestions] = useState<string[]>(["Your 'Food' budget is high, consider cutting back."]);
   const { data } = useDemoUser();
+
+  const plugin = useRef(
+    Autoplay({ delay: 3000, stopOnInteraction: true })
+  );
 
   const handleGetSuggestion = () => {
     if (!data) return;
@@ -206,13 +217,20 @@ export function AICopilotCard() {
                 expenses: expenseMap,
                 financialGoals: data.goals.map(g => g.name).join(', '),
             });
-            setSuggestion(result.suggestions);
+            if (result.suggestions && result.suggestions.length > 0) {
+                setSuggestions(result.suggestions);
+            }
         } catch (error) {
             console.error("Failed to get suggestion:", error);
-            setSuggestion("Sorry, I couldn't get a suggestion right now. Please try again in a moment.");
+            setSuggestions(["Sorry, I couldn't get a suggestion right now. Please try again in a moment."]);
         }
     });
   }
+
+  useEffect(() => {
+    handleGetSuggestion();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <Card className="bg-gradient-to-br from-primary/10 to-background">
@@ -238,10 +256,23 @@ export function AICopilotCard() {
              <div className="h-4 bg-muted-foreground/10 rounded-md animate-pulse w-5/6" />
           </div>
         )}
-        {!isPending && (
-          <div className="prose prose-sm max-w-none text-foreground/90">
-            <p>{suggestion}</p>
-          </div>
+        {!isPending && suggestions.length > 0 && (
+          <Carousel 
+            plugins={[plugin.current]}
+            className="w-full"
+            onMouseEnter={plugin.current.stop}
+            onMouseLeave={plugin.current.reset}
+          >
+            <CarouselContent>
+              {suggestions.map((suggestion, index) => (
+                <CarouselItem key={index}>
+                  <div className="prose prose-sm max-w-none text-foreground/90">
+                    <p>{suggestion}</p>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         )}
       </CardContent>
        {!isPending && (

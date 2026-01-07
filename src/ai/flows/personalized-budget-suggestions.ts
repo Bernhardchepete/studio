@@ -22,9 +22,9 @@ export type PersonalizedBudgetSuggestionsInput = z.infer<
 
 const PersonalizedBudgetSuggestionsOutputSchema = z.object({
   suggestions: z
-    .string()
+    .array(z.string())
     .describe(
-      'A concise, summarized, topic/heading style suggestion or call to action.'
+      'A list of 3-5 concise, summarized, topic/heading style suggestions or calls to action.'
     ),
 });
 export type PersonalizedBudgetSuggestionsOutput = z.infer<
@@ -41,16 +41,20 @@ const prompt = ai.definePrompt({
   name: 'personalizedBudgetSuggestionsPrompt',
   input: {schema: PersonalizedBudgetSuggestionsInputSchema},
   output: {schema: PersonalizedBudgetSuggestionsOutputSchema},
-  prompt: `You are a financial advisor. Based on the user's financial data, provide a concise, actionable heading or call to action. 
+  prompt: `You are a financial advisor. Based on the user's financial data, provide a list of 3-5 concise, actionable, and varied headings or calls to action. 
   
-  This should be a short phrase, not a full paragraph. For example: "Your 'Eating Out' budget is high, consider reviewing it" or "You're on track to hit your savings goal!".
+  These should be short phrases (1-2 lines), not full paragraphs. Rotate between different types of insights: warnings, positive reinforcement, and what-if nudges.
+
+  - If a budget category is overspent, create a warning: "Your 'Food' spending is high, consider reviewing it."
+  - If they are on track for a goal, give positive reinforcement: "You're on track to hit your savings goal!"
+  - If there is unallocated income, suggest a what-if scenario: "What if you invested your BWP 500 surplus?"
 
   Income: {{income}}
   Expenses: {{#each expenses}}{{@key}}: {{this}}
   {{/each}}
   Financial Goals: {{financialGoals}}
   
-  Provide just the heading-style suggestion.`,
+  Provide a JSON array of 3-5 varied, heading-style suggestions.`,
 });
 
 const personalizedBudgetSuggestionsFlow = ai.defineFlow(

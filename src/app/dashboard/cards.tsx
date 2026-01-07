@@ -188,7 +188,7 @@ export function PerformanceChartCard() {
 
 export function AICopilotCard() {
   const [isPending, startTransition] = useTransition();
-  const [suggestions, setSuggestions] = useState<string[]>(["Your 'Food' budget is high, consider cutting back."]);
+  const [suggestions, setSuggestions] = useState<string[]>(["What if you invested your BWP 500 surplus?"]);
   const { data } = useDemoUser();
 
   const plugin = useRef(
@@ -230,7 +230,7 @@ export function AICopilotCard() {
   useEffect(() => {
     handleGetSuggestion();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, []);
 
   return (
     <Card className="bg-gradient-to-br from-primary/10 to-background">
@@ -266,9 +266,17 @@ export function AICopilotCard() {
             <CarouselContent>
               {suggestions.map((suggestion, index) => (
                 <CarouselItem key={index}>
-                  <div className="prose prose-sm max-w-none text-foreground/90">
-                    <p>{suggestion}</p>
-                  </div>
+                  <Link
+                    href={{
+                      pathname: '/dashboard/digital-twin',
+                      query: { q: suggestion },
+                    }}
+                    className="block hover:bg-muted/50 p-2 rounded-md transition-colors"
+                  >
+                    <div className="prose prose-sm max-w-none text-foreground/90">
+                      <p>{suggestion}</p>
+                    </div>
+                  </Link>
                 </CarouselItem>
               ))}
             </CarouselContent>

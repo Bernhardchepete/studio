@@ -1,6 +1,8 @@
+
 'use client';
 
-import { useState, useTransition, useRef, useEffect } from 'react';
+import { useState, useTransition, useRef, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { DashboardHeader } from '@/components/dashboard-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,7 +25,10 @@ type Message = {
   content: string;
 };
 
-export default function DigitalTwinPage() {
+const DigitalTwinContent = () => {
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get('q');
+
   const [input, setInput] = useState('');
   const [isPending, startTransition] = useTransition();
   const [conversation, setConversation] = useState<Message[]>([
@@ -35,17 +40,10 @@ export default function DigitalTwinPage() {
   const { data } = useDemoUser();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-        scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
-    }
-  }, [conversation]);
+  const handleSendMessage = (message: string) => {
+    if (!message.trim() || !data) return;
 
-
-  const handleSendMessage = () => {
-    if (!input.trim() || !data) return;
-
-    const userMessage: Message = { role: 'user', content: input };
+    const userMessage: Message = { role: 'user', content: message };
     setConversation(prev => [...prev, userMessage]);
     setInput('');
 
@@ -58,22 +56,33 @@ export default function DigitalTwinPage() {
     startTransition(async () => {
       const result = await simulateFinancialScenario({
         currentFinancials: currentFinancials,
-        scenario: input,
+        scenario: message,
       });
       const assistantMessage: Message = { role: 'assistant', content: result.prediction };
       setConversation(prev => [...prev, assistantMessage]);
     });
   };
+  
+  useEffect(() => {
+    if (initialQuery) {
+        handleSendMessage(initialQuery);
+    }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuery]);
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+        scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+    }
+  }, [conversation]);
+
 
   const handleSuggestionClick = (suggestion: string) => {
-    setInput(suggestion);
+    handleSendMessage(suggestion);
   }
 
   return (
-    <div className="flex flex-1 flex-col h-screen">
-      <DashboardHeader title="Digital Twin" />
-      <main className="flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
-        <div className="flex-1 flex flex-col max-w-3xl mx-auto w-full">
+    <div className="flex-1 flex flex-col max-w-3xl mx-auto w-full">
             <ScrollArea className="flex-1 mb-4 pr-4" ref={scrollAreaRef}>
                  <div className="space-y-6">
                     {conversation.map((message, index) => (
@@ -127,14 +136,14 @@ export default function DigitalTwinPage() {
                         placeholder="e.g., What happens if I save BWP 500 more per month?"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && !isPending && handleSendMessage()}
+                        onKeyDown={(e) => e.key === 'Enter' && !isPending && handleSendMessage(input)}
                         disabled={isPending}
                         className="pr-12"
                     />
                     <Button 
                         size="icon"
                         className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
-                        onClick={handleSendMessage}
+                        onClick={() => handleSendMessage(input)}
                         disabled={isPending || !input.trim()}
                     >
                         {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4"/>}
@@ -142,6 +151,17 @@ export default function DigitalTwinPage() {
                 </div>
             </div>
         </div>
+  );
+}
+
+export default function DigitalTwinPage() {
+  return (
+    <div className="flex flex-1 flex-col h-screen">
+      <DashboardHeader title="Digital Twin" />
+      <main className="flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
+        <Suspense fallback={<div>Loading...</div>}>
+          <DigitalTwinContent />
+        </Suspense>
       </main>
     </div>
   );

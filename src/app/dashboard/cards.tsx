@@ -13,8 +13,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import {
@@ -25,7 +23,10 @@ import {
   TrendingUp,
   Target,
   ArrowRight,
-  RefreshCw
+  RefreshCw,
+  Activity,
+  CalendarDays,
+  AlertCircle
 } from "lucide-react";
 import {
   Line,
@@ -35,9 +36,12 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 import { formatCurrency, cn } from "@/lib/utils";
-import { useState, useTransition, useEffect, useRef } from "react";
+import { useState, useTransition, useEffect, useRef, useMemo } from "react";
 import { getPersonalizedBudgetSuggestions } from '@/ai/flows/personalized-budget-suggestions';
 import { Button } from "@/components/ui/button";
 import { useDemoUser } from "@/contexts/demo-user-context";
@@ -227,11 +231,6 @@ export function AICopilotCard() {
     });
   }
 
-  useEffect(() => {
-    handleGetSuggestion();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
   return (
     <Card className="bg-gradient-to-br from-primary/10 to-background">
       <CardHeader className="flex-row items-start justify-between">
@@ -282,6 +281,11 @@ export function AICopilotCard() {
             </CarouselContent>
           </Carousel>
         )}
+        {!isPending && suggestions.length === 0 && (
+            <div className="prose prose-sm max-w-none text-foreground/60 italic">
+                <p>"Cut back on transport cash to survive the next week." Click refresh for live insights.</p>
+            </div>
+        )}
       </CardContent>
        {!isPending && (
         <CardFooter className="gap-2">
@@ -316,15 +320,6 @@ export function FinancialPulseCard() {
             .filter(t => t.type === 'expense')
             .reduce((sum, t) => sum + t.amount, 0);
         
-        const totalBudgeted = data.budgets.reduce((sum, b) => sum + b.allocated, 0);
-        
-        // A simple calculation for "safe to spend"
-        // (Total Income - Total Budgeted for month) = Discretionary spending
-        const discretionary = totalIncome - totalBudgeted;
-
-        // Of the discretionary money, how much is left after all actual expenses.
-        // This calculation is a bit flawed for a real app but works for demo.
-        // A better way would be: (Income - Fixed/Budgeted Expenses) - Discretionary Spending so far.
         const remaining = totalIncome - totalSpent;
         setSafeToSpend(remaining);
 
@@ -381,6 +376,139 @@ export function FinancialPulseCard() {
                 </Button>
             </div>
             <p className="text-sm text-foreground/60">{statusConfig[status].message}</p>
+        </Card>
+    );
+}
+
+export function FinancialHealthScore() {
+    const { data } = useDemoUser();
+    
+    const score = useMemo(() => {
+        if (!data) return 0;
+        
+        // 1. Budget Adherence (40 points)
+        const totalBudgeted = data.budgets.reduce((sum, b) => sum + b.allocated, 0);
+        const totalSpent = data.budgets.reduce((sum, b) => sum + b.spent, 0);
+        const budgetScore = Math.max(0, 40 * (1 - (totalSpent > totalBudgeted ? (totalSpent - totalBudgeted) / totalBudgeted : 0)));
+        
+        // 2. Savings Rate (30 points)
+        const totalIncome = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+        const netSavings = data.transactions.reduce((sum, t) => t.type === 'income' ? sum + t.amount : sum - t.amount, 0);
+        const savingsRate = totalIncome > 0 ? (netSavings / totalIncome) : 0;
+        const savingsScore = Math.min(30, Math.max(0, savingsRate * 100));
+        
+        // 3. Goal Progress (20 points)
+        const totalGoalProgress = data.goals.reduce((sum, g) => sum + (g.saved / g.target), 0) / (data.goals.length || 1);
+        const goalScore = totalGoalProgress * 20;
+        
+        // 4. Investment Presence (10 points)
+        const investmentScore = data.investments.length > 0 ? 10 : 0;
+        
+        return Math.round(budgetScore + savingsScore + goalScore + investmentScore);
+    }, [data]);
+
+    const chartData = [
+        { name: 'Score', value: score },
+        { name: 'Remaining', value: 100 - score },
+    ];
+
+    const COLORS = ['hsl(var(--primary))', 'hsl(var(--muted))'];
+
+    return (
+        <Card className="flex flex-col h-full">
+            <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <Activity className="h-4 w-4 text-primary" />
+                    Financial Health Score
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center justify-center flex-1 py-0">
+                <div className="relative h-[180px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie
+                                data={chartData}
+                                cx="50%"
+                                cy="100%"
+                                startAngle={180}
+                                endAngle={0}
+                                innerRadius={60}
+                                outerRadius={80}
+                                paddingAngle={0}
+                                dataKey="value"
+                                stroke="none"
+                            >
+                                {chartData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
+                        </PieChart>
+                    </ResponsiveContainer>
+                    <div className="absolute inset-x-0 bottom-4 flex flex-col items-center justify-center">
+                        <span className="text-4xl font-bold">{score}</span>
+                        <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Out of 100</span>
+                    </div>
+                </div>
+                <div className="w-full text-center pb-4">
+                    <p className="text-xs text-muted-foreground px-4">
+                        {score > 80 ? "Excellent! Your financial habits are very strong." :
+                         score > 60 ? "Good work. Keep focusing on your savings goals." :
+                         "Needs focus. Try to reduce overspending in non-essentials."}
+                    </p>
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
+
+export function UpcomingBills() {
+    const { data } = useDemoUser();
+    
+    const upcoming = useMemo(() => {
+        if (!data) return [];
+        // Filter budgets that are 'High' priority and typically recurring
+        return data.budgets
+            .filter(b => b.priority === 'High' && b.spent < b.allocated)
+            .slice(0, 3);
+    }, [data]);
+
+    return (
+        <Card className="flex flex-col h-full">
+            <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <CalendarDays className="h-4 w-4 text-primary" />
+                    Upcoming Payments
+                </CardTitle>
+                <CardDescription className="text-xs">High priority commitments due soon.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-2">
+                {upcoming.length > 0 ? upcoming.map((bill) => (
+                    <div key={bill.id} className="flex items-center justify-between border-b pb-2 last:border-0 last:pb-0">
+                        <div className="space-y-0.5">
+                            <p className="text-sm font-medium">{bill.category}</p>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded font-bold">
+                                    {bill.paymentMethod}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-sm font-bold">{formatCurrency(bill.allocated - bill.spent)}</p>
+                            <p className="text-[10px] text-muted-foreground uppercase">Estimated</p>
+                        </div>
+                    </div>
+                )) : (
+                    <div className="flex flex-col items-center justify-center py-4 text-center">
+                        <AlertCircle className="h-8 w-8 text-muted-foreground/30 mb-2" />
+                        <p className="text-xs text-muted-foreground">All high-priority bills for this month are accounted for.</p>
+                    </div>
+                )}
+            </CardContent>
+            <CardFooter className="mt-auto pt-0">
+                <Button variant="ghost" size="sm" asChild className="w-full text-xs">
+                    <Link href="/dashboard/budgets">View All Budgets <ArrowRight className="ml-2 h-3 w-3" /></Link>
+                </Button>
+            </CardFooter>
         </Card>
     );
 }

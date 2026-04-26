@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thuo — Transactions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --background: 212 60% 95%;
+        --foreground: 215 87% 18%;
+        --card: 0 0% 100%;
+        --card-foreground: 215 87% 18%;
+        --primary: 208 65% 38%;
+        --primary-foreground: 210 40% 98%;
+        --muted: 212 58% 90%;
+        --muted-foreground: 212 58% 45%;
+        --border: 212 58% 88%;
+        --ring: 208 65% 38%;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      .card {
+        border: 1px solid hsl(var(--border));
+        background: hsl(var(--card));
+        color: hsl(var(--card-foreground));
+        border-radius: 0.75rem;
+      }
+    </style>
+  </head>
+  <body class="font-[Inter] antialiased bg-[hsl(var(--background))] text-[hsl(var(--foreground))]" data-page="transactions">
+    <div class="min-h-screen grid grid-cols-1 md:grid-cols-[260px_1fr]">
+      <aside class="hidden md:block border-r border-[hsl(var(--border))] bg-[hsl(var(--card))]">
+        <div class="p-4">
+          <div class="text-lg font-bold">Thuo</div>
+          <div id="userBadge" class="mt-1 text-xs text-[hsl(var(--muted-foreground))]"></div>
+        </div>
+        <nav class="px-3 pb-4 space-y-1 text-sm">
+          <a data-nav="dashboard" href="./dashboard.html" class="block rounded-md px-3 py-2">Dashboard</a>
+          <a data-nav="transactions" href="./dashboard-transactions.html" class="block rounded-md px-3 py-2">Transactions</a>
+          <a data-nav="budgets" href="./dashboard-budgets.html" class="block rounded-md px-3 py-2">Budgets</a>
+          <a data-nav="investments" href="./dashboard-investments.html" class="block rounded-md px-3 py-2">Investments</a>
+          <a data-nav="goals" href="./dashboard-goals.html" class="block rounded-md px-3 py-2">Goals</a>
+          <a data-nav="receipts" href="./dashboard-receipts.html" class="block rounded-md px-3 py-2">Receipts</a>
+          <a data-nav="digital-twin" href="./dashboard-digital-twin.html" class="block rounded-md px-3 py-2">Digital Twin</a>
+          <a data-nav="lending" href="./dashboard-lending.html" class="block rounded-md px-3 py-2">Lending</a>
+          <a data-nav="settings" href="./dashboard-settings.html" class="block rounded-md px-3 py-2">Settings</a>
+        </nav>
+        <div class="p-4">
+          <button id="logoutBtn" class="w-full rounded-md border border-[hsl(var(--border))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]" type="button">
+            Log out
+          </button>
+        </div>
+      </aside>
+
+      <main class="p-4 sm:p-6">
+        <!-- Mobile header -->
+        <div class="md:hidden flex items-center justify-between gap-3 mb-4">
+          <button
+            id="mobileMenuBtn"
+            type="button"
+            class="rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]"
+          >
+            Menu
+          </button>
+          <div class="text-sm font-semibold">Transactions</div>
+          <div id="userBadgeMobile" class="text-xs text-[hsl(var(--muted-foreground))] text-right"></div>
+        </div>
+
+        <!-- Mobile nav drawer -->
+        <div id="mobileNav" class="md:hidden fixed inset-0 z-50 hidden">
+          <div id="mobileNavBackdrop" class="absolute inset-0 bg-black/40"></div>
+          <div class="absolute left-0 top-0 h-full w-[84%] max-w-xs bg-[hsl(var(--card))] border-r border-[hsl(var(--border))] p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <div class="text-lg font-bold">Thuo</div>
+                <div id="userBadgeDrawer" class="mt-1 text-xs text-[hsl(var(--muted-foreground))]"></div>
+              </div>
+              <button id="mobileNavCloseBtn" type="button" class="rounded-md border border-[hsl(var(--border))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]">
+                Close
+              </button>
+            </div>
+            <nav class="mt-4 space-y-1 text-sm">
+              <a data-nav="dashboard" href="./dashboard.html" class="block rounded-md px-3 py-2">Dashboard</a>
+              <a data-nav="transactions" href="./dashboard-transactions.html" class="block rounded-md px-3 py-2">Transactions</a>
+              <a data-nav="budgets" href="./dashboard-budgets.html" class="block rounded-md px-3 py-2">Budgets</a>
+              <a data-nav="investments" href="./dashboard-investments.html" class="block rounded-md px-3 py-2">Investments</a>
+              <a data-nav="goals" href="./dashboard-goals.html" class="block rounded-md px-3 py-2">Goals</a>
+              <a data-nav="receipts" href="./dashboard-receipts.html" class="block rounded-md px-3 py-2">Receipts</a>
+              <a data-nav="digital-twin" href="./dashboard-digital-twin.html" class="block rounded-md px-3 py-2">Digital Twin</a>
+              <a data-nav="lending" href="./dashboard-lending.html" class="block rounded-md px-3 py-2">Lending</a>
+              <a data-nav="settings" href="./dashboard-settings.html" class="block rounded-md px-3 py-2">Settings</a>
+            </nav>
+            <div class="mt-4">
+              <button id="logoutBtnMobile" class="w-full rounded-md border border-[hsl(var(--border))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]" type="button">
+                Log out
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <header class="flex items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight">Transactions</h1>
+            <p class="text-sm text-[hsl(var(--muted-foreground))]">A record of your income and expenses (static demo).</p>
+          </div>
+          <a href="./dashboard-budgets.html" class="rounded-md border border-[hsl(var(--border))] px-4 py-2 text-sm hover:bg-[hsl(var(--muted))]">
+            View Budgets
+          </a>
+        </header>
+
+        <section class="mt-6 grid gap-6">
+          <div class="card p-5">
+            <div class="text-sm font-semibold">Pay & Transfer</div>
+            <p class="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
+              In the full app this opens dialogs for send/request money. (Static HTML version shows a simple preview.)
+            </p>
+            <div class="mt-4 flex flex-col sm:flex-row gap-3">
+              <button id="sendBtn" class="rounded-md bg-[hsl(var(--primary))] px-4 py-2 text-sm font-semibold text-[hsl(var(--primary-foreground))] hover:opacity-95" type="button">
+                Send Money
+              </button>
+              <button id="requestBtn" class="rounded-md bg-[hsl(var(--muted))] px-4 py-2 text-sm font-semibold hover:opacity-95" type="button">
+                Request Money
+              </button>
+            </div>
+          </div>
+
+          <div class="card overflow-hidden">
+            <div class="p-5 border-b border-[hsl(var(--border))] flex items-center justify-between">
+              <div>
+                <div class="text-sm font-semibold">All Transactions</div>
+                <p class="mt-1 text-sm text-[hsl(var(--muted-foreground))]">Sample data for preview.</p>
+              </div>
+              <button id="addTxnBtn" class="rounded-md border border-[hsl(var(--border))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]" type="button">
+                Add Transaction
+              </button>
+            </div>
+            <div id="txnList" class="divide-y divide-[hsl(var(--border))] text-sm">
+              <div class="p-4 flex items-center justify-between">
+                <div>
+                  <div class="font-medium">School Allowance</div>
+                  <div class="text-xs text-[hsl(var(--muted-foreground))]">2024-07-28 · Allowance · Income</div>
+                </div>
+                <div class="font-semibold text-green-700" data-money="1900"></div>
+              </div>
+              <div class="p-4 flex items-center justify-between">
+                <div>
+                  <div class="font-medium">Weekly Groceries</div>
+                  <div class="text-xs text-[hsl(var(--muted-foreground))]">2024-07-26 · Food · Expense</div>
+                </div>
+                <div class="font-semibold" data-money="120"></div>
+              </div>
+              <div class="p-4 flex items-center justify-between">
+                <div>
+                  <div class="font-medium">Trip to University</div>
+                  <div class="text-xs text-[hsl(var(--muted-foreground))]">2024-07-22 · Transport · Expense</div>
+                </div>
+                <div class="font-semibold" data-money="80"></div>
+              </div>
+              <div class="p-4 flex items-center justify-between">
+                <div>
+                  <div class="font-medium">Side Hustle - Tutoring</div>
+                  <div class="text-xs text-[hsl(var(--muted-foreground))]">2024-07-15 · Income · Income</div>
+                </div>
+                <div class="font-semibold text-green-700" data-money="500"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script>
+      const users = {
+        thabo: { name: "Thabo", persona: "The Student" },
+        naledi: { name: "Naledi", persona: "The Salaried Employee" },
+        kabelo: { name: "Kabelo", persona: "The SME Owner" },
+        amogelang: { name: "Amogelang", persona: "The Gig Worker" },
+        family: { name: "The Motswais", persona: "The Family Account" },
+      };
+
+      function $(id) {
+        return document.getElementById(id);
+      }
+
+      function getSelectedUserId() {
+        return localStorage.getItem("thuo.selectedUserId") || "thabo";
+      }
+
+      function formatCurrency(amount) {
+        try {
+          return new Intl.NumberFormat("en-BW", {
+            style: "currency",
+            currency: "BWP",
+            maximumFractionDigits: 2,
+          }).format(amount);
+        } catch {
+          return `P${Number(amount).toFixed(2)}`;
+        }
+      }
+
+      function setActiveNav() {
+        const page = document.body?.dataset?.page;
+        if (!page) return;
+        document.querySelectorAll("[data-nav]").forEach((a) => {
+          a.classList.remove("bg-[hsl(var(--primary))]", "text-[hsl(var(--primary-foreground))]");
+          a.classList.add("hover:bg-[hsl(var(--muted))]");
+        });
+        const active = document.querySelector(`[data-nav="${page}"]`);
+        if (active) {
+          active.classList.remove("hover:bg-[hsl(var(--muted))]");
+          active.classList.add("bg-[hsl(var(--primary))]", "text-[hsl(var(--primary-foreground))]");
+        }
+      }
+
+      function renderUserBadge() {
+        const el = $("userBadge");
+        if (!el) return;
+        const userId = getSelectedUserId();
+        const user = users[userId];
+        el.textContent = user ? `${user.name} • ${user.persona}` : "Demo user";
+      }
+
+      (() => {
+        renderUserBadge();
+        setActiveNav();
+
+        const logoutBtn = $("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            window.location.href = "./index.html";
+          });
+        }
+
+        document.querySelectorAll("[data-money]").forEach((el) => {
+          const n = Number(el.getAttribute("data-money") || "0");
+          el.textContent = formatCurrency(n);
+        });
+
+        // Persisted transactions (per selected user)
+        const userId = getSelectedUserId();
+        const txKey = `thuo.data.${userId}.transactions`;
+        const getTxns = () => {
+          try {
+            const raw = localStorage.getItem(txKey);
+            return raw ? JSON.parse(raw) : null;
+          } catch {
+            return null;
+          }
+        };
+        const setTxns = (txns) => localStorage.setItem(txKey, JSON.stringify(txns));
+        const seedTxns = [
+          { id: "t1", date: "2024-07-28", description: "School Allowance", category: "Allowance", amount: 1900, type: "income" },
+          { id: "t2", date: "2024-07-15", description: "Side Hustle - Tutoring", category: "Income", amount: 500, type: "income" },
+          { id: "t3", date: "2024-07-01", description: "Rent Contribution", category: "Housing", amount: 1000, type: "expense" },
+          { id: "t4", date: "2024-07-26", description: "Weekly Groceries", category: "Food", amount: 120, type: "expense" },
+          { id: "t5", date: "2024-07-22", description: "Trip to University", category: "Transport", amount: 80, type: "expense" },
+          { id: "t6", date: "2024-07-15", description: "Social Outing", category: "Entertainment", amount: 150, type: "expense" },
+        ];
+        if (!localStorage.getItem(txKey)) setTxns(seedTxns);
+
+        // Mobile nav
+        const mobileNav = $("mobileNav");
+        const openMobileNav = () => mobileNav?.classList.remove("hidden");
+        const closeMobileNav = () => mobileNav?.classList.add("hidden");
+        $("mobileMenuBtn")?.addEventListener("click", openMobileNav);
+        $("mobileNavCloseBtn")?.addEventListener("click", closeMobileNav);
+        $("mobileNavBackdrop")?.addEventListener("click", closeMobileNav);
+
+        // Mirror user badge on mobile
+        const badgeText = $("userBadge")?.textContent || "";
+        if ($("userBadgeMobile")) $("userBadgeMobile").textContent = badgeText;
+        if ($("userBadgeDrawer")) $("userBadgeDrawer").textContent = badgeText;
+
+        // Mobile logout
+        $("logoutBtnMobile")?.addEventListener("click", () => {
+          window.location.href = "./index.html";
+        });
+
+        // Button functionality
+        const txnList = $("txnList");
+        const renderTxns = (txns) => {
+          if (!txnList) return;
+          txnList.innerHTML = "";
+          txns.forEach((t) => {
+            const row = document.createElement("div");
+            row.className = "p-4 flex items-center justify-between";
+            const rightClass = t.type === "income" ? "font-semibold text-green-700" : "font-semibold";
+            row.innerHTML = `
+              <div>
+                <div class="font-medium"></div>
+                <div class="text-xs text-[hsl(var(--muted-foreground))]"></div>
+              </div>
+              <div class="${rightClass}"></div>
+            `;
+            row.querySelector(".font-medium").textContent = t.description;
+            row.querySelector(".text-xs").textContent = `${t.date} · ${t.category} · ${t.type === "income" ? "Income" : "Expense"}`;
+            row.querySelector(`.${rightClass.split(" ").join(".")}`).textContent = formatCurrency(Number(t.amount) || 0);
+            txnList.appendChild(row);
+          });
+        };
+
+        let txns = getTxns() || seedTxns;
+        renderTxns(txns);
+
+        const addTxn = (txn) => {
+          txns = [{ ...txn, id: `t-${Date.now()}` }, ...txns];
+          setTxns(txns);
+          renderTxns(txns);
+        };
+
+        $("sendBtn")?.addEventListener("click", () => {
+          const recipient = prompt("Send money to (name/email/phone):");
+          if (!recipient) return;
+          const amtStr = prompt("Amount (BWP):");
+          const amount = Number(amtStr);
+          if (!Number.isFinite(amount) || amount <= 0) {
+            alert("Please enter a valid amount.");
+            return;
+          }
+          addTxn({
+            description: `Payment to ${recipient}`,
+            date: new Date().toISOString().slice(0, 10),
+            category: "Other",
+            type: "expense",
+            amount,
+          });
+          alert("Payment added to your transactions (demo).");
+        });
+
+        $("requestBtn")?.addEventListener("click", () => {
+          const from = prompt("Request money from (name/email/phone):");
+          if (!from) return;
+          const amtStr = prompt("Amount (BWP):");
+          const amount = Number(amtStr);
+          if (!Number.isFinite(amount) || amount <= 0) {
+            alert("Please enter a valid amount.");
+            return;
+          }
+          addTxn({
+            description: `Request from ${from}`,
+            date: new Date().toISOString().slice(0, 10),
+            category: "Other",
+            type: "income",
+            amount,
+          });
+          alert("Request added to your transactions (demo).");
+        });
+
+        $("addTxnBtn")?.addEventListener("click", () => {
+          const description = prompt("Description:");
+          if (!description) return;
+          const category = prompt("Category (e.g. Food, Transport, Other):") || "Other";
+          const type = (prompt("Type: income or expense?") || "expense").toLowerCase() === "income" ? "income" : "expense";
+          const amtStr = prompt("Amount (BWP):");
+          const amount = Number(amtStr);
+          if (!Number.isFinite(amount) || amount <= 0) {
+            alert("Please enter a valid amount.");
+            return;
+          }
+          addTxn({
+            description,
+            date: new Date().toISOString().slice(0, 10),
+            category,
+            type,
+            amount,
+          });
+        });
+
+        // Make any remaining buttons functional
+        document.querySelectorAll("button").forEach((btn) => {
+          if (btn.id && ["logoutBtn", "logoutBtnMobile", "mobileMenuBtn", "mobileNavCloseBtn", "sendBtn", "requestBtn", "addTxnBtn"].includes(btn.id)) return;
+          if (btn.dataset.wired === "1") return;
+          btn.dataset.wired = "1";
+          btn.addEventListener("click", () => {
+            alert(`${btn.textContent?.trim() || "Button"} (demo)`);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

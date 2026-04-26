@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thuo — Digital Twin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --background: 212 60% 95%;
+        --foreground: 215 87% 18%;
+        --card: 0 0% 100%;
+        --card-foreground: 215 87% 18%;
+        --primary: 208 65% 38%;
+        --primary-foreground: 210 40% 98%;
+        --muted: 212 58% 90%;
+        --muted-foreground: 212 58% 45%;
+        --border: 212 58% 88%;
+        --ring: 208 65% 38%;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      .card {
+        border: 1px solid hsl(var(--border));
+        background: hsl(var(--card));
+        color: hsl(var(--card-foreground));
+        border-radius: 0.75rem;
+      }
+    </style>
+  </head>
+  <body class="font-[Inter] antialiased bg-[hsl(var(--background))] text-[hsl(var(--foreground))]" data-page="digital-twin">
+    <div class="min-h-screen grid grid-cols-1 md:grid-cols-[260px_1fr]">
+      <aside class="hidden md:block border-r border-[hsl(var(--border))] bg-[hsl(var(--card))]">
+        <div class="p-4">
+          <div class="text-lg font-bold">Thuo</div>
+          <div id="userBadge" class="mt-1 text-xs text-[hsl(var(--muted-foreground))]"></div>
+        </div>
+        <nav class="px-3 pb-4 space-y-1 text-sm">
+          <a data-nav="dashboard" href="./dashboard.html" class="block rounded-md px-3 py-2">Dashboard</a>
+          <a data-nav="transactions" href="./dashboard-transactions.html" class="block rounded-md px-3 py-2">Transactions</a>
+          <a data-nav="budgets" href="./dashboard-budgets.html" class="block rounded-md px-3 py-2">Budgets</a>
+          <a data-nav="investments" href="./dashboard-investments.html" class="block rounded-md px-3 py-2">Investments</a>
+          <a data-nav="goals" href="./dashboard-goals.html" class="block rounded-md px-3 py-2">Goals</a>
+          <a data-nav="receipts" href="./dashboard-receipts.html" class="block rounded-md px-3 py-2">Receipts</a>
+          <a data-nav="digital-twin" href="./dashboard-digital-twin.html" class="block rounded-md px-3 py-2">Digital Twin</a>
+          <a data-nav="lending" href="./dashboard-lending.html" class="block rounded-md px-3 py-2">Lending</a>
+          <a data-nav="settings" href="./dashboard-settings.html" class="block rounded-md px-3 py-2">Settings</a>
+        </nav>
+        <div class="p-4">
+          <button id="logoutBtn" class="w-full rounded-md border border-[hsl(var(--border))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]" type="button">
+            Log out
+          </button>
+        </div>
+      </aside>
+
+      <main class="p-4 sm:p-6">
+        <header class="flex items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight">Digital Twin</h1>
+            <p class="text-sm text-[hsl(var(--muted-foreground))]">Ask “what if?” questions (static demo).</p>
+          </div>
+          <a href="./dashboard.html" class="rounded-md border border-[hsl(var(--border))] px-4 py-2 text-sm hover:bg-[hsl(var(--muted))]">
+            Back to Dashboard
+          </a>
+        </header>
+
+        <section class="mt-6 grid gap-6">
+          <div class="card p-5">
+            <div class="text-sm font-semibold">Simulation Prompt</div>
+            <p class="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
+              The Next.js version connects AI tools to generate recommendations. This static HTML version shows the UI only.
+            </p>
+            <div class="mt-4 grid gap-3">
+              <label class="text-sm font-medium" for="q">Your question</label>
+              <textarea
+                id="q"
+                rows="4"
+                class="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+                placeholder="e.g. If I cut food spending by P200 per month, how fast can I hit my Trip goal?"
+              ></textarea>
+              <button class="w-full sm:w-auto rounded-md bg-[hsl(var(--primary))] px-4 py-2 text-sm font-semibold text-[hsl(var(--primary-foreground))] hover:opacity-95" type="button">
+                Run Simulation
+              </button>
+              <div class="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
+                Output preview:
+                <div class="mt-2 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
+                  “Suggestion: Start with a weekly food cap and automate a transfer into your goal account.”
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script>
+      const users = {
+        thabo: { name: "Thabo", persona: "The Student" },
+        naledi: { name: "Naledi", persona: "The Salaried Employee" },
+        kabelo: { name: "Kabelo", persona: "The SME Owner" },
+        amogelang: { name: "Amogelang", persona: "The Gig Worker" },
+        family: { name: "The Motswais", persona: "The Family Account" },
+      };
+
+      function $(id) {
+        return document.getElementById(id);
+      }
+
+      function getSelectedUserId() {
+        return localStorage.getItem("thuo.selectedUserId") || "thabo";
+      }
+
+      function setActiveNav() {
+        const page = document.body?.dataset?.page;
+        if (!page) return;
+        document.querySelectorAll("[data-nav]").forEach((a) => {
+          a.classList.remove("bg-[hsl(var(--primary))]", "text-[hsl(var(--primary-foreground))]");
+          a.classList.add("hover:bg-[hsl(var(--muted))]");
+        });
+        const active = document.querySelector(`[data-nav="${page}"]`);
+        if (active) {
+          active.classList.remove("hover:bg-[hsl(var(--muted))]");
+          active.classList.add("bg-[hsl(var(--primary))]", "text-[hsl(var(--primary-foreground))]");
+        }
+      }
+
+      function renderUserBadge() {
+        const el = $("userBadge");
+        if (!el) return;
+        const userId = getSelectedUserId();
+        const user = users[userId];
+        el.textContent = user ? `${user.name} • ${user.persona}` : "Demo user";
+      }
+
+      (() => {
+        renderUserBadge();
+        setActiveNav();
+
+        const logoutBtn = $("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            window.location.href = "./index.html";
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

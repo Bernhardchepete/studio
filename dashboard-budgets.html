@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thuo — Budgets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --background: 212 60% 95%;
+        --foreground: 215 87% 18%;
+        --card: 0 0% 100%;
+        --card-foreground: 215 87% 18%;
+        --primary: 208 65% 38%;
+        --primary-foreground: 210 40% 98%;
+        --muted: 212 58% 90%;
+        --muted-foreground: 212 58% 45%;
+        --border: 212 58% 88%;
+        --ring: 208 65% 38%;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      .card {
+        border: 1px solid hsl(var(--border));
+        background: hsl(var(--card));
+        color: hsl(var(--card-foreground));
+        border-radius: 0.75rem;
+      }
+    </style>
+  </head>
+  <body class="font-[Inter] antialiased bg-[hsl(var(--background))] text-[hsl(var(--foreground))]" data-page="budgets">
+    <div class="min-h-screen grid grid-cols-1 md:grid-cols-[260px_1fr]">
+      <aside class="hidden md:block border-r border-[hsl(var(--border))] bg-[hsl(var(--card))]">
+        <div class="p-4">
+          <div class="text-lg font-bold">Thuo</div>
+          <div id="userBadge" class="mt-1 text-xs text-[hsl(var(--muted-foreground))]"></div>
+        </div>
+        <nav class="px-3 pb-4 space-y-1 text-sm">
+          <a data-nav="dashboard" href="./dashboard.html" class="block rounded-md px-3 py-2">Dashboard</a>
+          <a data-nav="transactions" href="./dashboard-transactions.html" class="block rounded-md px-3 py-2">Transactions</a>
+          <a data-nav="budgets" href="./dashboard-budgets.html" class="block rounded-md px-3 py-2">Budgets</a>
+          <a data-nav="investments" href="./dashboard-investments.html" class="block rounded-md px-3 py-2">Investments</a>
+          <a data-nav="goals" href="./dashboard-goals.html" class="block rounded-md px-3 py-2">Goals</a>
+          <a data-nav="receipts" href="./dashboard-receipts.html" class="block rounded-md px-3 py-2">Receipts</a>
+          <a data-nav="digital-twin" href="./dashboard-digital-twin.html" class="block rounded-md px-3 py-2">Digital Twin</a>
+          <a data-nav="lending" href="./dashboard-lending.html" class="block rounded-md px-3 py-2">Lending</a>
+          <a data-nav="settings" href="./dashboard-settings.html" class="block rounded-md px-3 py-2">Settings</a>
+        </nav>
+        <div class="p-4">
+          <button id="logoutBtn" class="w-full rounded-md border border-[hsl(var(--border))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]" type="button">
+            Log out
+          </button>
+        </div>
+      </aside>
+
+      <main class="p-4 sm:p-6">
+        <header class="flex items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight">Budgets</h1>
+            <p class="text-sm text-[hsl(var(--muted-foreground))]">Monthly categories and spending (static demo).</p>
+          </div>
+          <a href="./dashboard-goals.html" class="rounded-md border border-[hsl(var(--border))] px-4 py-2 text-sm hover:bg-[hsl(var(--muted))]">
+            View Goals
+          </a>
+        </header>
+
+        <section class="mt-6 grid gap-6">
+          <div class="card p-5 flex items-center justify-between">
+            <div>
+              <div class="text-sm font-semibold">Your Monthly Budgets</div>
+              <p class="mt-1 text-sm text-[hsl(var(--muted-foreground))]">In the full app you can add/edit budgets. Here we show a preview.</p>
+            </div>
+            <button id="addBudgetBtn" class="rounded-md bg-[hsl(var(--primary))] px-4 py-2 text-sm font-semibold text-[hsl(var(--primary-foreground))] hover:opacity-95" type="button">
+              Add Budget
+            </button>
+          </div>
+
+          <div id="budgetsGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="card p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="text-sm font-semibold">Housing</div>
+                  <div class="mt-1 text-xs text-[hsl(var(--muted-foreground))]"><span data-money="1000"></span> allocated</div>
+                </div>
+                <span class="text-xs rounded-full bg-red-100 px-2 py-1">High</span>
+              </div>
+              <div class="mt-4">
+                <div class="h-2 w-full rounded-full bg-[hsl(var(--muted))] overflow-hidden">
+                  <div class="h-full w-[100%] bg-[hsl(var(--primary))]"></div>
+                </div>
+                <div class="mt-2 flex items-center justify-between text-xs text-[hsl(var(--muted-foreground))]">
+                  <span>Spent: <span data-money="1000"></span></span>
+                  <span>Left: <span data-money="0"></span></span>
+                </div>
+              </div>
+              <div class="mt-4">
+                <label class="text-xs text-[hsl(var(--muted-foreground))]" for="pm-housing">Payment method</label>
+                <select
+                  id="pm-housing"
+                  data-payment-method-for="Housing"
+                  class="mt-2 h-10 w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+                >
+                  <option value="Automatic">Automatic</option>
+                  <option value="Manual" selected>Manual</option>
+                  <option value="ConsentFirst">Consent First</option>
+                </select>
+              </div>
+              <a
+                href="./budget-plan.html?category=Housing&allocated=1000&priority=High"
+                class="mt-4 inline-flex w-full items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]"
+              >
+                View Plan
+              </a>
+            </div>
+
+            <div class="card p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="text-sm font-semibold">Food</div>
+                  <div class="mt-1 text-xs text-[hsl(var(--muted-foreground))]"><span data-money="400"></span> allocated</div>
+                </div>
+                <span class="text-xs rounded-full bg-red-100 px-2 py-1">High</span>
+              </div>
+              <div class="mt-4">
+                <div class="h-2 w-full rounded-full bg-[hsl(var(--muted))] overflow-hidden">
+                  <div class="h-full w-[100%] bg-[hsl(var(--primary))]"></div>
+                </div>
+                <div class="mt-2 flex items-center justify-between text-xs text-[hsl(var(--muted-foreground))]">
+                  <span>Spent: <span data-money="400"></span></span>
+                  <span>Left: <span data-money="0"></span></span>
+                </div>
+              </div>
+              <div class="mt-4">
+                <label class="text-xs text-[hsl(var(--muted-foreground))]" for="pm-food">Payment method</label>
+                <select
+                  id="pm-food"
+                  data-payment-method-for="Food"
+                  class="mt-2 h-10 w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+                >
+                  <option value="Automatic">Automatic</option>
+                  <option value="Manual" selected>Manual</option>
+                  <option value="ConsentFirst">Consent First</option>
+                </select>
+              </div>
+              <a
+                href="./budget-plan.html?category=Food&allocated=400&priority=High"
+                class="mt-4 inline-flex w-full items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]"
+              >
+                View Plan
+              </a>
+            </div>
+
+            <div class="card p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="text-sm font-semibold">Investment</div>
+                  <div class="mt-1 text-xs text-[hsl(var(--muted-foreground))]"><span data-money="282"></span> allocated</div>
+                </div>
+                <span class="text-xs rounded-full bg-red-100 px-2 py-1">High</span>
+              </div>
+              <div class="mt-4">
+                <div class="h-2 w-full rounded-full bg-[hsl(var(--muted))] overflow-hidden">
+                  <div class="h-full w-[0%] bg-[hsl(var(--primary))]"></div>
+                </div>
+                <div class="mt-2 flex items-center justify-between text-xs text-[hsl(var(--muted-foreground))]">
+                  <span>Spent: <span data-money="0"></span></span>
+                  <span>Left: <span data-money="282"></span></span>
+                </div>
+              </div>
+              <a href="./dashboard-investments.html" class="mt-4 inline-flex text-sm font-semibold text-[hsl(var(--primary))] hover:underline">
+                Go to Investments →
+              </a>
+              <div class="mt-3">
+                <label class="text-xs text-[hsl(var(--muted-foreground))]" for="pm-investment">Payment method</label>
+                <select
+                  id="pm-investment"
+                  data-payment-method-for="Investment"
+                  class="mt-2 h-10 w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+                >
+                  <option value="Automatic">Automatic</option>
+                  <option value="Manual" selected>Manual</option>
+                  <option value="ConsentFirst">Consent First</option>
+                </select>
+              </div>
+              <a
+                href="./budget-plan.html?category=Investment&allocated=282&priority=High"
+                class="mt-3 inline-flex w-full items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]"
+              >
+                View Plan
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script>
+      const users = {
+        thabo: { name: "Thabo", persona: "The Student" },
+        naledi: { name: "Naledi", persona: "The Salaried Employee" },
+        kabelo: { name: "Kabelo", persona: "The SME Owner" },
+        amogelang: { name: "Amogelang", persona: "The Gig Worker" },
+        family: { name: "The Motswais", persona: "The Family Account" },
+      };
+
+      function $(id) {
+        return document.getElementById(id);
+      }
+
+      function getSelectedUserId() {
+        return localStorage.getItem("thuo.selectedUserId") || "thabo";
+      }
+
+      function formatCurrency(amount) {
+        try {
+          return new Intl.NumberFormat("en-BW", {
+            style: "currency",
+            currency: "BWP",
+            maximumFractionDigits: 2,
+          }).format(amount);
+        } catch {
+          return `P${Number(amount).toFixed(2)}`;
+        }
+      }
+
+      function setActiveNav() {
+        const page = document.body?.dataset?.page;
+        if (!page) return;
+        document.querySelectorAll("[data-nav]").forEach((a) => {
+          a.classList.remove("bg-[hsl(var(--primary))]", "text-[hsl(var(--primary-foreground))]");
+          a.classList.add("hover:bg-[hsl(var(--muted))]");
+        });
+        const active = document.querySelector(`[data-nav="${page}"]`);
+        if (active) {
+          active.classList.remove("hover:bg-[hsl(var(--muted))]");
+          active.classList.add("bg-[hsl(var(--primary))]", "text-[hsl(var(--primary-foreground))]");
+        }
+      }
+
+      function renderUserBadge() {
+        const el = $("userBadge");
+        if (!el) return;
+        const userId = getSelectedUserId();
+        const user = users[userId];
+        el.textContent = user ? `${user.name} • ${user.persona}` : "Demo user";
+      }
+
+      (() => {
+        renderUserBadge();
+        setActiveNav();
+
+        const logoutBtn = $("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            window.location.href = "./index.html";
+          });
+        }
+
+        document.querySelectorAll("[data-money]").forEach((el) => {
+          const n = Number(el.getAttribute("data-money") || "0");
+          el.textContent = formatCurrency(n);
+        });
+
+        // Add Budget button
+        const budgetsGrid = $("budgetsGrid");
+        const addBudgetBtn = $("addBudgetBtn");
+
+        const normalizePriority = (p) => {
+          const v = String(p || "").trim().toLowerCase();
+          if (v === "high") return "High";
+          if (v === "low") return "Low";
+          return "Medium";
+        };
+
+        const priorityBadgeClass = (p) => {
+          if (p === "High") return "bg-red-100";
+          if (p === "Low") return "bg-green-100";
+          return "bg-yellow-100";
+        };
+
+        const addBudgetCard = ({ category, allocated, spent, priority }) => {
+          const progress = allocated > 0 ? Math.min(100, Math.round((spent / allocated) * 100)) : 0;
+          const left = allocated - spent;
+
+          const card = document.createElement("div");
+          card.className = "card p-5";
+          card.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <div class="text-sm font-semibold"></div>
+                <div class="mt-1 text-xs text-[hsl(var(--muted-foreground))]"><span class="js-allocated"></span> allocated</div>
+              </div>
+              <span class="text-xs rounded-full px-2 py-1 js-priority"></span>
+            </div>
+            <div class="mt-4">
+              <div class="h-2 w-full rounded-full bg-[hsl(var(--muted))] overflow-hidden">
+                <div class="h-full bg-[hsl(var(--primary))] js-bar" style="width:${progress}%"></div>
+              </div>
+              <div class="mt-2 flex items-center justify-between text-xs text-[hsl(var(--muted-foreground))]">
+                <span>Spent: <span class="js-spent"></span></span>
+                <span>Left: <span class="js-left"></span></span>
+              </div>
+            </div>
+            <div class="mt-4">
+              <label class="text-xs text-[hsl(var(--muted-foreground))]">Payment method</label>
+              <select
+                data-payment-method-for=""
+                class="mt-2 h-10 w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+              >
+                <option value="Automatic">Automatic</option>
+                <option value="Manual" selected>Manual</option>
+                <option value="ConsentFirst">Consent First</option>
+              </select>
+            </div>
+            <a class="mt-4 inline-flex w-full items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-sm hover:bg-[hsl(var(--muted))] js-planLink">
+              View Plan
+            </a>
+          `;
+          card.querySelector(".text-sm.font-semibold").textContent = category;
+          card.querySelector(".js-allocated").textContent = formatCurrency(allocated);
+
+          const badge = card.querySelector(".js-priority");
+          badge.textContent = priority;
+          badge.className = `text-xs rounded-full px-2 py-1 ${priorityBadgeClass(priority)}`;
+
+          card.querySelector(".js-spent").textContent = formatCurrency(spent);
+          card.querySelector(".js-left").textContent = formatCurrency(left);
+
+          const planLink = card.querySelector(".js-planLink");
+          const qs = new URLSearchParams({
+            category: category.trim(),
+            allocated: String(allocated),
+            priority: String(priority),
+          }).toString();
+          planLink.setAttribute("href", `./budget-plan.html?${qs}`);
+
+          const pmSelect = card.querySelector("select");
+          pmSelect.setAttribute("data-payment-method-for", category.trim());
+
+          budgetsGrid?.prepend(card);
+        };
+
+        // Payment method persistence (per category)
+        const paymentKey = (category) => `thuo.budget.paymentMethod.${String(category || "").toLowerCase()}`;
+        const loadPaymentMethod = (category) => localStorage.getItem(paymentKey(category)) || "Manual";
+        const savePaymentMethod = (category, method) => localStorage.setItem(paymentKey(category), method);
+
+        const applyPaymentMethodToSelect = (selectEl) => {
+          const category = selectEl.getAttribute("data-payment-method-for") || "";
+          const saved = loadPaymentMethod(category);
+          selectEl.value = saved;
+          selectEl.addEventListener("change", () => {
+            savePaymentMethod(category, selectEl.value);
+            alert(`Payment method for ${category}: ${selectEl.options[selectEl.selectedIndex].text}`);
+          });
+        };
+
+        document.querySelectorAll("select[data-payment-method-for]").forEach((s) => applyPaymentMethodToSelect(s));
+
+        if (addBudgetBtn) {
+          addBudgetBtn.addEventListener("click", () => {
+            const category = prompt("Budget category (e.g. Groceries, Transport):");
+            if (!category) return;
+            const allocatedStr = prompt("Allocated amount (BWP):");
+            const allocated = Number(allocatedStr);
+            if (!Number.isFinite(allocated) || allocated <= 0) {
+              alert("Please enter a valid allocated amount.");
+              return;
+            }
+            const priority = normalizePriority(prompt("Priority (High/Medium/Low):") || "Medium");
+            addBudgetCard({ category: category.trim(), allocated, spent: 0, priority });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

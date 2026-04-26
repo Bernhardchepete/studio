@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thuo — Budget Plan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --background: 212 60% 95%;
+        --foreground: 215 87% 18%;
+        --card: 0 0% 100%;
+        --card-foreground: 215 87% 18%;
+        --primary: 208 65% 38%;
+        --primary-foreground: 210 40% 98%;
+        --muted: 212 58% 90%;
+        --muted-foreground: 212 58% 45%;
+        --border: 212 58% 88%;
+        --ring: 208 65% 38%;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      .card {
+        border: 1px solid hsl(var(--border));
+        background: hsl(var(--card));
+        color: hsl(var(--card-foreground));
+        border-radius: 0.75rem;
+      }
+    </style>
+  </head>
+  <body class="font-[Inter] antialiased bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+    <main class="p-4 sm:p-6 max-w-4xl mx-auto">
+      <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold tracking-tight">Budget Breakdown</h1>
+          <p class="text-sm text-[hsl(var(--muted-foreground))]">A simple plan: how to stay on budget, how to reach it, and by when.</p>
+        </div>
+        <a
+          href="./dashboard-budgets.html"
+          class="inline-flex items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-2 text-sm hover:bg-[hsl(var(--muted))]"
+        >
+          ← Back to Budgets
+        </a>
+      </header>
+
+      <section class="mt-6 grid gap-6">
+        <div class="card p-5">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div>
+              <div class="text-sm font-semibold" id="categoryTitle">Budget</div>
+              <div class="mt-1 text-sm text-[hsl(var(--muted-foreground))]" id="priorityText"></div>
+            </div>
+            <div class="text-left sm:text-right">
+              <div class="text-xs text-[hsl(var(--muted-foreground))]">Allocated (monthly)</div>
+              <div class="text-3xl font-bold" id="allocatedAmount">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card p-5">
+            <div class="text-sm font-semibold">Weekly target</div>
+            <div class="mt-3 text-2xl font-bold" id="weeklyTarget">—</div>
+            <p class="mt-2 text-sm text-[hsl(var(--muted-foreground))]">A 4-week guideline to keep spending controlled.</p>
+          </div>
+          <div class="card p-5">
+            <div class="text-sm font-semibold">Daily target</div>
+            <div class="mt-3 text-2xl font-bold" id="dailyTarget">—</div>
+            <p class="mt-2 text-sm text-[hsl(var(--muted-foreground))]">Average per day (30-day month estimate).</p>
+          </div>
+          <div class="card p-5">
+            <div class="text-sm font-semibold">When you’ll finish this month</div>
+            <div class="mt-3 text-2xl font-bold" id="monthEnd">—</div>
+            <p class="mt-2 text-sm text-[hsl(var(--muted-foreground))]">This budget resets monthly (demo logic).</p>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <div class="text-sm font-semibold">Action plan</div>
+          <ol class="mt-4 space-y-3 text-sm">
+            <li class="flex gap-3">
+              <span class="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-[hsl(var(--muted))] flex items-center justify-center text-xs font-bold">1</span>
+              <div>
+                <div class="font-semibold">Set a weekly limit</div>
+                <div class="text-[hsl(var(--muted-foreground))]" id="weeklyLimitLine">—</div>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-[hsl(var(--muted))] flex items-center justify-center text-xs font-bold">2</span>
+              <div>
+                <div class="font-semibold">Track every spend</div>
+                <div class="text-[hsl(var(--muted-foreground))]">Add transactions right after you pay so you stay accurate.</div>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-[hsl(var(--muted))] flex items-center justify-center text-xs font-bold">3</span>
+              <div>
+                <div class="font-semibold">Adjust mid‑month</div>
+                <div class="text-[hsl(var(--muted-foreground))]" id="adjustLine">—</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="card p-5">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div class="text-sm font-semibold">Need a different plan?</div>
+              <p class="mt-1 text-sm text-[hsl(var(--muted-foreground))]">Change the allocation on the budgets page and reopen this plan.</p>
+            </div>
+            <a
+              href="./dashboard-budgets.html"
+              class="inline-flex items-center justify-center rounded-md bg-[hsl(var(--primary))] px-4 py-2 text-sm font-semibold text-[hsl(var(--primary-foreground))] hover:opacity-95"
+            >
+              Edit budgets
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      function formatCurrency(amount) {
+        try {
+          return new Intl.NumberFormat("en-BW", {
+            style: "currency",
+            currency: "BWP",
+            maximumFractionDigits: 2,
+          }).format(amount);
+        } catch {
+          return `P${Number(amount).toFixed(2)}`;
+        }
+      }
+
+      function fmtDate(d) {
+        try {
+          return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+        } catch {
+          return d.toISOString().slice(0, 10);
+        }
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const category = params.get("category") || "Budget";
+      const allocated = Number(params.get("allocated") || "0");
+      const priority = params.get("priority") || "Medium";
+
+      const now = new Date();
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+      const weekly = allocated > 0 ? allocated / 4 : 0;
+      const daily = allocated > 0 ? allocated / 30 : 0;
+
+      document.getElementById("categoryTitle").textContent = category;
+      document.getElementById("priorityText").textContent = `Priority: ${priority}`;
+      document.getElementById("allocatedAmount").textContent = allocated > 0 ? formatCurrency(allocated) : "—";
+      document.getElementById("weeklyTarget").textContent = allocated > 0 ? formatCurrency(weekly) : "—";
+      document.getElementById("dailyTarget").textContent = allocated > 0 ? formatCurrency(daily) : "—";
+      document.getElementById("monthEnd").textContent = fmtDate(endOfMonth);
+
+      document.getElementById("weeklyLimitLine").textContent =
+        allocated > 0
+          ? `Keep this category under ${formatCurrency(weekly)} per week (≈ ${formatCurrency(daily)} per day).`
+          : "Set an allocated amount to generate a plan.";
+
+      document.getElementById("adjustLine").textContent =
+        allocated > 0
+          ? `If you overspend early, reduce the next week by the difference so you still finish by ${fmtDate(endOfMonth)}.`
+          : "—";
+    </script>
+  </body>
+</html>

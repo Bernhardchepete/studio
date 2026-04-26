@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thuo</title>
+    <meta name="description" content="Your personal financial operating system." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --background: 212 60% 95%;
+        --foreground: 215 87% 18%;
+        --card: 0 0% 100%;
+        --card-foreground: 215 87% 18%;
+        --primary: 208 65% 38%;
+        --primary-foreground: 210 40% 98%;
+        --muted: 212 58% 90%;
+        --muted-foreground: 212 58% 45%;
+        --border: 212 58% 88%;
+        --ring: 208 65% 38%;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      .card {
+        border: 1px solid hsl(var(--border));
+        background: hsl(var(--card));
+        color: hsl(var(--card-foreground));
+        border-radius: 0.75rem;
+      }
+    </style>
+  </head>
+  <body class="font-[Inter] antialiased bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+    <main class="min-h-screen flex items-center justify-center p-4 sm:p-6">
+      <section class="w-full max-w-md mx-auto">
+        <div class="flex justify-center mb-8">
+          <div class="bg-[hsl(var(--primary))] p-4 rounded-full shadow-lg">
+            <!-- Wallet icon -->
+            <svg
+              class="h-10 w-10 text-[hsl(var(--primary-foreground))]"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+              <path d="M3 7h18a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H3" />
+              <path d="M18 12h.01" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] shadow-sm">
+          <header class="px-6 pt-6 text-center">
+            <h1 class="text-3xl font-bold tracking-tight">Thuo</h1>
+            <p class="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
+              Select a user profile to explore the app
+            </p>
+          </header>
+
+          <div class="px-6 pb-6 pt-6 space-y-6">
+            <div class="space-y-2">
+              <label for="email" class="text-sm font-medium leading-none">Email Address</label>
+              <select
+                id="email"
+                class="h-11 w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]"
+              >
+                <option value="thabo">Thabo (The Student) — thabo.student@thuo.app</option>
+                <option value="naledi">Naledi (The Salaried Employee) — naledi.employee@thuo.app</option>
+                <option value="kabelo">Kabelo (The SME Owner) — kabelo.sme@thuo.app</option>
+                <option value="amogelang">Amogelang (The Gig Worker) — amo.freelancer@thuo.app</option>
+                <option value="family">The Motswais (The Family Account) — family.motswai@thuo.app</option>
+              </select>
+              <p id="personaHint" class="text-xs text-[hsl(var(--muted-foreground))]"></p>
+            </div>
+
+            <div class="space-y-2">
+              <label for="password" class="text-sm font-medium leading-none">Password</label>
+              <input
+                id="password"
+                type="password"
+                value="demopassword"
+                disabled
+                class="h-11 w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-3 py-2 text-sm text-[hsl(var(--muted-foreground))]"
+              />
+              <p class="text-xs text-[hsl(var(--muted-foreground))]">
+                Passwords are disabled for this demo environment.
+              </p>
+            </div>
+
+            <button
+              id="signInBtn"
+              type="button"
+              class="w-full inline-flex items-center justify-center gap-2 rounded-md bg-[hsl(var(--primary))] px-4 py-3 text-sm font-semibold text-[hsl(var(--primary-foreground))] shadow hover:opacity-95 active:opacity-90 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] focus:ring-offset-2 focus:ring-offset-[hsl(var(--background))]"
+            >
+              <!-- LogIn icon -->
+              <svg
+                class="h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                <path d="M10 17l5-5-5-5" />
+                <path d="M15 12H3" />
+              </svg>
+              Sign In
+            </button>
+          </div>
+        </div>
+
+        <p class="text-center text-xs text-[hsl(var(--muted-foreground))] mt-6">
+          This is a sandboxed demo. No real data is used.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const users = {
+        thabo: {
+          name: "Thabo",
+          persona: "The Student",
+          description:
+            "Balancing a school allowance and a side hustle, Thabo is focused on micro-saving and getting a head start on investing.",
+        },
+        naledi: {
+          name: "Naledi",
+          persona: "The Salaried Employee",
+          description:
+            "With a steady income, Naledi is focused on automating her finances, building her credit score, and saving for a new car.",
+        },
+        kabelo: {
+          name: "Kabelo",
+          persona: "The SME Owner",
+          description:
+            "Juggling variable business income, Kabelo needs to track expenses meticulously and access working capital to grow his business.",
+        },
+        amogelang: {
+          name: "Amogelang",
+          persona: "The Gig Worker",
+          description:
+            "Riding the waves of freelance life, Amogelang needs tools to smooth out income, save for goals, and manage irregular payments.",
+        },
+        family: {
+          name: "The Motswais",
+          persona: "The Family Account",
+          description:
+            "A shared wallet for the Motswai family. Multiple members contribute towards common goals like holidays and home projects.",
+        },
+      };
+
+      function getSelectedUserId() {
+        return localStorage.getItem("thuo.selectedUserId") || "thabo";
+      }
+
+      function setSelectedUserId(userId) {
+        localStorage.setItem("thuo.selectedUserId", userId);
+      }
+
+      (() => {
+        const selectEl = document.getElementById("email");
+        const hintEl = document.getElementById("personaHint");
+        const signInBtn = document.getElementById("signInBtn");
+
+        if (selectEl && hintEl) {
+          selectEl.value = getSelectedUserId();
+          const renderHint = () => {
+            const user = users[selectEl.value];
+            hintEl.textContent = user ? `${user.persona}: ${user.description}` : "";
+            setSelectedUserId(selectEl.value);
+          };
+          selectEl.addEventListener("change", renderHint);
+          renderHint();
+        }
+
+        if (signInBtn) {
+          signInBtn.addEventListener("click", () => {
+            if (selectEl) setSelectedUserId(selectEl.value);
+            window.location.href = "./dashboard.html";
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

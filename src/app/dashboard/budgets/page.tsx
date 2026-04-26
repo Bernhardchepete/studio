@@ -27,7 +27,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import type { Budget, BudgetCategory } from '@/lib/types';
 import { formatCurrency, cn } from "@/lib/utils";
-import { PlusCircle, MoreVertical, Zap, CircleDot, ShieldCheck, User, CheckCircle } from "lucide-react";
+import { PlusCircle, MoreVertical, Zap, CircleDot, ShieldCheck, User, CheckCircle, Sparkles, ArrowRight } from "lucide-react";
 import { Badge } from '@/components/ui/badge';
 import { useDemoUser } from '@/contexts/demo-user-context';
 import {
@@ -48,6 +48,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Link from 'next/link';
 
 
 const priorityConfig = {
@@ -201,8 +202,21 @@ export default function BudgetsPage() {
             const isOverBudget = progress > 100;
             const PaymentIcon = paymentMethodConfig[budget.paymentMethod].icon;
 
+            // Check if this budget category relates to any existing goal
+            const matchingGoal = data.goals.find(g => 
+              g.name.toLowerCase().includes(budget.category.toLowerCase()) || 
+              budget.category.toLowerCase().includes(g.name.toLowerCase())
+            );
+
+            const optimizationHref = matchingGoal 
+              ? { pathname: '/dashboard/goals' } 
+              : {
+                  pathname: '/dashboard/digital-twin',
+                  query: { q: `I want to optimize my ${budget.category} budget. What is the best strategy to stay within this budget so I can reach my overall financial goals faster?` },
+                };
+
             return (
-              <Card key={budget.id}>
+              <Card key={budget.id} className="flex flex-col h-full group transition-all duration-200 hover:shadow-md hover:ring-1 hover:ring-primary/20">
                 <CardHeader>
                     <div className="flex items-start justify-between">
                         <div>
@@ -218,7 +232,7 @@ export default function BudgetsPage() {
                         </Badge>
                     </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex-1">
                   <div className="space-y-4">
                     <div className="space-y-2">
                         <Progress value={isOverBudget ? 100 : progress} className={isOverBudget ? "[&>div]:bg-destructive" : ""} />
@@ -255,6 +269,19 @@ export default function BudgetsPage() {
                     </div>
                   </div>
                 </CardContent>
+                <CardFooter className="pt-2">
+                    <Button 
+                      variant="outline" 
+                      className="w-full bg-primary/5 hover:bg-primary hover:text-primary-foreground group-hover:border-primary transition-colors" 
+                      asChild
+                    >
+                      <Link href={optimizationHref}>
+                        <Sparkles className="mr-2 h-4 w-4" />
+                        {matchingGoal ? 'Track Goal Progress' : 'AI Optimization Plan'}
+                        <ArrowRight className="ml-2 h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                      </Link>
+                    </Button>
+                </CardFooter>
               </Card>
             );
           })}
